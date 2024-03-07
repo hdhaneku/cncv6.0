@@ -1,0 +1,24 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-bf5c93
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value ami-01ab4e043ba3690a5 for parameter name
+NsoAmiId does not exist, parameter value ami-084c2685fc3041767 for parameter name
+CwAmiId does not exist, parameter value ami-0111fc861b88a5677 for parameter name
+WindowsAMI does not exist, parameter value ami-07a2732b92e5a2378 for parameter name
+CDGAmiId does not exist, parameter value ami-0ec33c2ee35a9554e for parameter name
+SRPCEAmiId does not exist, parameter value klm for parameter name KeyName does not
+exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2024-01-24 22:22:27.055000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-bf5c93  Parameter validation failed: parameter value ami-01ab4e043ba3690a5 for parameter name NsoAmiId does not exist, parameter value ami-084c2685fc3041767 for parameter name CwAmiId does not exist, parameter value ami-0111fc861b88a5677 for parameter name WindowsAMI does not exist, parameter value ami-07a2732b92e5a2378 for parameter name CDGAmiId does not exist, parameter value ami-0ec33c2ee35a9554e for parameter name SRPCEAmiId does not exist, parameter value klm for parameter name KeyName does not exist
+2024-01-24 22:22:22.974000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-bf5c93  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Wednesday, 24. January 2024 02:23PM
+-----------------------------------------------------------------------------
+

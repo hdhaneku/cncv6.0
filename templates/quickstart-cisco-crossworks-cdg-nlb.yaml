@@ -1,0 +1,376 @@
+Description: "Sample CF Template for EC2 CDG NLB Stack"
+
+Parameters:
+  VpcId:
+    Description: The VPC of the worker instances
+    Type: 'AWS::EC2::VPC::Id'
+    Default: vpc-0f83aac74690101a3
+  SubnetId1:
+    Description: Select CDG NLB subnet 1
+    Type: AWS::EC2::Subnet::Id
+    Default: "subnet-07a8f8e38fc4257a8"
+  SubnetId2:
+    Description: Select CDG NLB subnet 2
+    Type: AWS::EC2::Subnet::Id
+    Default: "subnet-04de4dd5af5d12b38"
+  DomainName:
+    Type: String
+    Description: Enter the Domain Name
+    Default: cwcisco.com
+  HostedZoneId:
+    Description: Enter HostedZone ID
+    Type: String
+    Default: Z0227555274KL9V9E3L58
+  CdgPoolHostname:
+    Description: Name of the Route53 record
+    Type: String
+    Default: ec2cdgnlb
+  CdgTargetIP1:
+    Type: String
+    Description: Specify the CDG IP1.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+  CdgTargetIP2:
+    Type: String
+    Description: Specify the CDG IP2.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+  LBIPaddress1:
+    Description: LB IP address on subnet
+    Type: String
+    Default: "0.0.0.0"
+  LBIPaddress2:
+    Description: LB IP address on subnet
+    Type: String
+    Default: "0.0.0.0"
+
+Conditions:
+  CdgSameSubnet1And2: !Equals
+    - !Ref SubnetId1
+    - !Ref SubnetId2
+  SetLBAddress1: !Not
+    - !Equals
+      - !Ref LBIPaddress1
+      - "0.0.0.0"
+  SetLBAddress2: !Not
+    - !Equals
+      - !Ref LBIPaddress2
+      - "0.0.0.0"
+
+Resources:
+
+  # Create Target Groups
+  CollTargetGroup1:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'syslog-coll-1'
+      Port: 9514
+      Protocol: UDP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 10000
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Targets:
+        -
+          Id: !Ref CdgTargetIP1
+          Port: 9514
+        -
+          Id: !Ref CdgTargetIP2
+          Port: 9514
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  CollTargetGroup2:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'syslog-coll-2'
+      Port: 9898
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 10000
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Targets:
+        -
+          Id: !Ref CdgTargetIP1
+          Port: 9898
+        -
+          Id: !Ref CdgTargetIP2
+          Port: 9898
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  CollTargetGroup3:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'syslog-coll-3'
+      Port: 6514
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 10000
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Targets:
+        -
+          Id: !Ref CdgTargetIP1
+          Port: 6514
+        -
+          Id: !Ref CdgTargetIP2
+          Port: 6514
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  CollTargetGroup4:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'snmp-coll'
+      Port: 1062
+      Protocol: UDP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 10000
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Targets:
+        -
+          Id: !Ref CdgTargetIP1
+          Port: 1062
+        -
+          Id: !Ref CdgTargetIP2
+          Port: 1062
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  CollTargetGroup5:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'mdt-coll'
+      Port: 9010
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPort: 10000
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Targets:
+        -
+          Id: !Ref CdgTargetIP1
+          Port: 9010
+        -
+          Id: !Ref CdgTargetIP2
+          Port: 9010
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  # Create a Network Load Balancer for CDG
+  CDGLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn:
+      - CollTargetGroup1
+      - CollTargetGroup2
+      - CollTargetGroup3
+      - CollTargetGroup4
+      - CollTargetGroup5
+    Properties:
+      IpAddressType: ipv4
+      Name: !Join
+              - '-'
+              - - !Ref CdgPoolHostname
+                - 'lb'
+      Scheme: internal
+      SubnetMappings: !If
+        - CdgSameSubnet1And2
+        - - SubnetId: !Ref SubnetId1
+            PrivateIPv4Address: !If
+              - SetLBAddress1
+              - !Sub ${LBIPaddress1}
+              - !Ref AWS::NoValue
+        - - SubnetId: !Ref SubnetId1
+            PrivateIPv4Address: !If
+              - SetLBAddress1
+              - !Sub ${LBIPaddress1}
+              - !Ref AWS::NoValue
+          - SubnetId: !Ref SubnetId2
+            PrivateIPv4Address: !If
+              - SetLBAddress2
+              - !Sub ${LBIPaddress2}
+              - !Ref AWS::NoValue
+      Type: network
+      Tags:
+        - Key: hapool
+          Value: !Join
+                    - '.'
+                    - - !Ref CdgPoolHostname
+                      - !Ref DomainName
+
+  # Create Listner for NLB
+  DataListner1:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CDGLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CollTargetGroup1
+      LoadBalancerArn: !Ref CDGLB
+      Port: 9514
+      Protocol: UDP
+
+  DataListner2:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CDGLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CollTargetGroup2
+      LoadBalancerArn: !Ref CDGLB
+      Port: 9898
+      Protocol: TCP
+
+  DataListner3:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CDGLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CollTargetGroup3
+      LoadBalancerArn: !Ref CDGLB
+      Port: 6514
+      Protocol: TCP
+
+  DataListner4:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CDGLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CollTargetGroup4
+      LoadBalancerArn: !Ref CDGLB
+      Port: 1062
+      Protocol: UDP
+
+  DataListner5:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CDGLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CollTargetGroup5
+      LoadBalancerArn: !Ref CDGLB
+      Port: 9010
+      Protocol: TCP
+
+  # Creating FQDN record in Route53 for NLB
+  CDGNLBRecord:
+    Type: AWS::Route53::RecordSetGroup
+    # DependsOn:
+    #   - CDGLB 
+    Properties: 
+      RecordSets:
+      - Name: !Join
+                - '.'
+                - - !Ref CdgPoolHostname
+                  - !Ref DomainName
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt CDGLB.DNSName
+          HostedZoneId: !GetAtt CDGLB.CanonicalHostedZoneID
+      HostedZoneId: !Ref HostedZoneId
+
+Outputs:
+  CDGLBName:
+    Value: !GetAtt CDGLB.LoadBalancerName
+  CDGLBDNS:
+    Value: !GetAtt CDGLB.DNSName
+  CDGRout53RecordName:
+    Value: !Sub ${CdgPoolHostname}.${DomainName}

@@ -1,0 +1,802 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Template for Cisco Crosswork Network Controller on AWS
+# Metadata:
+#   QuickStartDocumentation:
+#     EntrypointName: "Launch into a new VPC"
+#     Order: "1"
+#   AWS::CloudFormation::Interface:
+#     ParameterGroups:
+#       - Label:
+#           default: VPC configuration
+#         Parameters:
+#           - VPCCIDR
+#           - NumberOfAZs
+#           - AvailabilityZones 
+#           - KeyName
+#       - Label:
+#           default: Connect to on-prem network
+#         Parameters:
+#           - NetworkChoice
+#           - NewTGWASN
+#           - ExistingTGWID
+#           - ExistingTGWRouteTable      
+#           - CustomerGatewayIP
+
+#       - Label:
+#           default: Crossworks configuration
+#         Parameters:
+#           - InterfaceDeploymentMode
+#           - CwClusterPlacementStrategy
+#           - MgmtSubnet1Netmask
+#           - CwMgmtSubnetGateway
+#           - CwMgmtVIP
+#           - CwDataSubnetNetmask
+#           - CwDataSubnetGateway
+#           - CwDataVIP
+#           - CwDeviceSubnetNetmask
+#           - CwDeviceSubnetGateway
+#           - CwDeviceVIP
+#           - CwAmiId
+#           - CwSSHPassword
+#           - InstanceType
+#           - DataDiskSize
+#           - K8sServiceNetwork
+#           - K8sPodNetwork
+#           - Cw1MgmtIP
+#           - Cw1DataIP
+#           - Cw2MgmtIP
+#           - Cw2DataIP
+#           - Cw3MgmtIP
+#           - Cw3DataIP
+#           - NsoAmiId
+#           - CDGAmiId
+#           - CDGSSHPassword
+#           - SRPCEAmiId
+#           - WindowsAMI
+#       - Label:
+#           default: AWS Quick Start configuration
+#         Parameters:
+#           - QSS3BucketName
+#           - QSS3KeyPrefix
+#           - QSS3BucketRegion
+          
+
+
+Parameters:
+##################  Addede for 5.0
+  ManagementVIPName:
+    Type: String
+    Description: Crosswork cluster management hostname. Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character.
+
+  DataVIPName:
+    Type: String
+    Description: Crosswork cluster data hostname. Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character.
+  Route53DomainName:
+    Description: Domain name used for all Route53 objects
+    Type: String
+    Default: "cwcisco.com"
+
+
+  MgmtSubnet1Netmask:
+    Type: String
+    Description: Enter the 1st management subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  MgmtSubnet1Gateway:
+    Type: String
+    Description: Enter the 1st management default gateway on the selected management subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.0.1"
+
+
+  MgmtSubnet2Netmask:
+    Type: String
+    Description: Enter the 2nd management subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  MgmtSubnet2Gateway:
+    Type: String
+    Description: Enter the 2nd management default gateway on the selected management subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.3.1"
+
+
+  MgmtSubnet3Netmask:
+    Type: String
+    Description: Enter the 3rd management subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  MgmtSubnet3Gateway:
+    Type: String
+    Description: Enter the 3rd management default gateway on the selected management subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.6.1"
+
+  # Create a new AWS NLB or use an existing NLB
+  UseExternalNLB:
+    Type: String
+    Description: Use an external NLB for this Cw cluster (multi-AZ/subnet) or a Crosswork VIP (only single AZ/subnet). 
+    AllowedValues:
+      - "True"
+      - "False"
+    Default: "True"
+
+
+  DataSubnet1Netmask:
+    Type: String
+    Description: Enter the 1st data subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DataSubnet2Netmask:
+    Type: String
+    Description: Enter the 2nd data subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DataSubnet3Netmask:
+    Type: String
+    Description: Enter the 3rd data subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DataSubnet1Gateway:
+    Type: String
+    Description: Enter the 1st data default gateway on the selected Data subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.1.1"
+
+  DataSubnet2Gateway:
+    Type: String
+    Description: Enter the 2nd data default gateway on the selected Data subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.4.1"
+
+  DataSubnet3Gateway:
+    Type: String
+    Description: Enter the 3rd data default gateway on the selected Data subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.7.1"
+
+
+  DeviceSubnet1Netmask:
+    Type: String
+    Description: Enter the 1st Device subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DeviceSubnet2Netmask:
+    Type: String
+    Description: Enter the 2nd Device subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DeviceSubnet3Netmask:
+    Type: String
+    Description: Enter the 3rd Device subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  DeviceSubnet1Gateway:
+    Type: String
+    Description: Enter the 1st Device default gateway on the selected Device subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.2.1"
+
+  DeviceSubnet2Gateway:
+    Type: String
+    Description: Enter the 2nd Device default gateway on the selected Device subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.5.1"
+
+  DeviceSubnet3Gateway:
+    Type: String
+    Description: Enter the 3rd Device default gateway on the selected Device subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: "10.0.8.1"
+
+
+
+  MgLBIPaddress1:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 1. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  MgLBIPaddress2:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 2. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  MgLBIPaddress3:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 3. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  DtLBIPaddress1:
+    Description: OPTIONAL - Enter the devices IP address for the CW Data Loadbalancer on the Data Subnet 1. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  DtLBIPaddress2:
+    Description: OPTIONAL - Enter the devices IP address for the CW Data Loadbalancer on the Data Subnet 2. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  DtLBIPaddress3:
+    Description: OPTIONAL - Enter the devices IP address for the CW Data Loadbalancer on the Data Subnet 3. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  CDGOperPassword:
+    Type: String
+    NoEcho: True
+    Description: Enter the password to be configured on the CDG for Dg-Oper User
+
+  CdgPoolHostname:
+    Description: Hostname of the CDG Pool Route53 record
+    Type: String
+
+  CdgInstanceHostname1:
+    Description: CDG1 Instance Name
+    Type: String
+    Default: cdgtest1
+
+  CdgInstanceHostname2:
+    Description: CDG2 Instance Name
+    Type: String
+    Default: cdgtest2
+
+  LBIPaddress1:
+    Description: OPTIONAL - Fixed IP address on for the CDG HA Pool on the first subnet. Set to 0.0.0.0 for the address to be automatically assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  LBIPaddress2:
+    Description: OPTIONAL - Fixed IP address on for the CDG HA Pool on the second subnet. Set to 0.0.0.0 for the address to be automatically assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  CDGProfile:
+    Type: String
+    Description: Deployment profile of the CDG
+    AllowedValues:
+      - Standard
+      - Extended
+      - Crosswork-Cloud
+    Default: Standard
+
+  SkipAutoInstall:
+    Type: String
+    Description: Enable Skip Auto Install Feature
+    AllowedValues:
+      - "True"
+      - "False"
+    Default: "False"
+
+  NsoPoolHostname:
+    Description: Name of the NSO Route53 record
+    Type: String
+
+
+  NsoLBIPaddress1:
+    Description: LB IP address on subnet
+    Type: String
+    Default: "0.0.0.0"
+
+  NsoLBIPaddress2:
+    Description: LB IP address on subnet
+    Type: String
+    Default: "0.0.0.0"
+
+  NsoHealthCheckPort:
+    Description: Enter NSO HealthCheckPort
+    Type: String
+    Default: "1830"
+
+  NSO1Interface0IPAddress:
+    Type: String
+    Description: OPTIONAL - Enter a *free* IP address on the nso subnet 1. If set to "0.0.0.0", an IP address will be allocated automatically .
+    Default: "0.0.0.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})|^$
+
+  NSO2Interface0IPAddress:
+    Type: String
+    Description: OPTIONAL - Enter a *free* IP address on the nso subnet 2. If set to "0.0.0.0", an IP address will be allocated automatically .
+    Default: "0.0.0.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})|^$
+
+  CECid:
+    Description: Enter your Cisco CEC Id
+    Type: String
+
+  Purpose:
+    Description: Deployment Purpose
+    Type: String
+
+  Customer:
+    Description: Customer
+    Type: String
+
+  AllocationOwner:
+    Description: Specify the allocation owner group for the deployment
+    Type: String
+    AllowedValues:
+      - development
+      - marketing
+      - test
+      - automation
+
+  CNCProductGroup:
+    Description: Enter Cisco Product Group
+    Type: String
+    AllowedValues:
+      - CW-Infra
+      - CDG
+      - NSO
+      - XR
+      - SIT
+      - BuildAutomation
+      - Application
+
+  SchedulingPolicy:
+    Description: Enter The schedule
+    Type: String
+    AllowedValues:
+      - eu-till-end-of-day-shut
+      - pst-till-end-of-day-shut
+      - ist-till-end-of-day-shut
+      - pst-office-hours
+      - ist-office-hours
+      - eu-office-hours
+      - no-schedule
+
+  SingleHybridNode:
+    Description: EXPERIMENTAL - Deploy single Cw Hybrid node. Use the default value for general use.
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    Default: "False"
+
+  EnforcePodReservations:
+    Description: EXPERIMENTAL - Enforce pod resource reservations. Use the default value for general use.
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    Default: "True"
+
+################## / Addede for 5.0
+  KeyName:
+    Description: Pem file for access to created instances
+    Type: 'AWS::EC2::KeyPair::KeyName'
+  # AMIid:
+  #   Description: Specify the AMI-id for C9800-CL EC2 instance. Ex. ami-0e8d3a29c643f59a2
+  #   Default: ''
+  #   Type: 'AWS::EC2::Image::Id'
+
+  NumberOfAZs:
+    Type: String
+    Description: Number of Availability Zones used in the Crossworks VPC
+    Default: 3
+    AllowedValues:
+      - 3
+  AvailabilityZones:
+    Description: List of Availability Zones to use for the VPC subnets. Two Availability Zones are used for this deployment.
+    Type: List<AWS::EC2::AvailabilityZone::Name>
+  VPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form `x.x.x.x/16-28`.
+    Default: 10.10.0.0/16
+    Description: CIDR block for the Crosswork VPC
+    Type: String
+  NetworkChoice:
+    Description: Chose between new or exisiting TGW for Private Network.  Or an IGW in VPC for Public access via the internet
+    Type: String
+    AllowedValues:
+      - "Private - New TGW"
+      - "Private - Existing TGW"
+      - "Public - IGW"
+  NewTGWASN:
+    Description: ASN for new TGW.  Ignore (or leave blank) if using <Public - IGW> or an <Private - Existing TGW>
+    Type: String
+    Default: '64520'  
+  ExistingTGWID:
+    Description: Existing TGW ID -- needed only if you want to use existing TGW.  
+    Type: String
+    Default: ''
+  ExistingTGWRouteTable:
+    Description: Existing TGW Route Table -- needed only if you want to use existing TGW.  Crossworks VPC will form attachment to TGW RT
+    Type: String
+    Default: ''    
+  CustomerGatewayIP:
+    Description: Public IP of the Customer's on-prem CGW Router/FireWall - needed only if <Private - New TGW> is selected.  Creates an IPSec tunnel to connect back on-prem
+    Type: String
+    Default: ''  
+  TagPrefix:
+    Description: Value to prepend tag and naming conventions
+    Type: String
+    Default: Crossworks-QuickStart-
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a
+      hyphen (-).
+    Default: aws-quickstart
+    Description:
+      Name of the S3 bucket for your copy of the Quick Start assets.
+      Keep the default name unless you are customizing the template.
+      Changing the name updates code references to point to a new Quick
+      Start location. This name can include numbers, lowercase letters,
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-).
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is
+    hosted. Keep the default Region unless you are customizing the template.
+    Changing this Region updates code references to point to a new Quick Start location.
+    When using your own bucket, specify the Region.
+    See https://aws-quickstart.github.io/option1.html.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
+    Default: quickstart-cisco-crossworks/
+    Description:
+      S3 key prefix used to simulate a directory for your copy of the
+      Quick Start assets. Keep the default prefix unless you're customizing
+      the template. Changing this prefix updates code references to point to
+      a new Quick Start location. This prefix can include numbers, lowercase
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
+
+
+  InterfaceDeploymentMode:
+    Type: String
+    Description: Select 1 (Management only) or 2 (Management + Data) interface deployment mode.
+    AllowedValues:
+      - 1
+      - 2
+      - 3
+
+
+  # CwDeviceSubnetNetmask:
+  #   Type: String
+  #   Description: Enter the data subnet netmask in dotted decimal form, eg 255.255.255.0. Ignored when deploying in single interface mode.
+  #   Default: "255.255.255.0"
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  # CwDeviceSubnetGateway:
+  #   Type: String
+  #   Description: Enter the management default gateway on the selectec data subnet. This is typically the first address on the subnet. Ignored when deploying in single interface mode.
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+  #   Default: '0.0.0.0'
+
+  # CwDeviceVIP:
+  #   Type: String
+  #   Description: OPTIONAL - Specify a free address on the data subnet to be used as the VIP. If not specified an address will be assigned automatically.
+  #   AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+  #   Default: ""
+
+  CwAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide Crosswork AMI ID.
+
+
+  SSHPassword:
+    Type: String
+    AllowedPattern: >-
+      (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: >-
+      Enter CNC SSH Password. NOTE; Use of external secret store is recommended.
+      Password for the domain admin user. Must be at least 8 characters
+      and contain letters, numbers, and symbols.
+    NoEcho: True
+
+  InstanceType:
+    Description: Enter EC2 instance type for the CNC node instances. Default is m5.4xlarge.
+    Type: String
+    AllowedValues:
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.2xlarge
+      - m5.12xlarge
+      - m5d.4xlarge
+      - m5d.8xlarge
+      - m5d.2xlarge
+      - m5d.12xlarge
+      - m5n.4xlarge
+      - m5n.8xlarge
+      - m5n.2xlarge
+      - m5n.12xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+      - r5.2xlarge
+      - r5.12xlarge
+      - c5.4xlarge
+      - c5.8xlarge
+      - c5.2xlarge
+      - c5.12xlarge
+      - m5zn.2xlarge
+      - m5zn.3xlarge
+      - m5zn.4xlarge
+    Default: m5.4xlarge
+
+  DataDiskSize:
+    Description: Cw data disk size.
+    Type: Number
+    MinValue: 450
+    Default: 450
+
+  K8sServiceNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s service network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.96.0.0'
+
+  K8sPodNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s pod network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.244.0.0'
+
+  Cw1MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw1DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw2MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw2DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw3MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw3DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwClusterPlacementStrategy:
+    Type: String
+    Description: Specify the EC2 instance placement strategy. Default 'cluster' ensures maximum throughput.
+    Default: cluster
+    AllowedValues:
+      - cluster
+      - partition
+      - spread
+
+
+  NsoAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide NSO AMI ID.
+
+  CDGAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide CDG AMI ID
+
+  SRPCEAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide SR-PCE AMI ID.
+
+  WindowsAMI:
+    Type: AWS::EC2::Image::Id
+    Description: WIndows AMI used for RDP to connect to Crosswork CNC
+
+Conditions:
+  ConditionPublic: !Equals [!Ref NetworkChoice, 'Public - IGW']
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
+Mappings: {}
+Resources:
+
+  VPCStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        AvailabilityZones: !Join
+          - ','
+          - !Ref AvailabilityZones
+        NumberOfAZs: !Ref NumberOfAZs
+        # PublicSubnet1CIDR: !If [ConditionPublic, !Select [ 0, !Cidr [ !Ref VPCCIDR, 4, 8 ]], !Ref 'AWS::NoValue' ] 
+        # PublicSubnet2CIDR: !If [ConditionPublic, !Select [ 1, !Cidr [ !Ref VPCCIDR, 4, 8 ]], !Ref 'AWS::NoValue' ] 
+        CreateAdditionalPrivateSubnets: 'true' #needed to create a 2nd subnet
+        PrivateSubnet3: 'true' # I added this to the VPC module for our special case 3 subnet requirement
+
+        # Add logic in case only 2 AZs selected.  Force 3 for now
+        PrivateSubnet1ACIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 0, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ] 
+        PrivateSubnet1BCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 1, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+        PrivateSubnet1CCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 2, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+
+        PrivateSubnet2ACIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 3, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+        PrivateSubnet2BCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 4, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+        PrivateSubnet2CCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 5, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+
+        PrivateSubnet3ACIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 6, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+        PrivateSubnet3BCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 7, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+        PrivateSubnet3CCIDR: !If [ConditionPublic, !Ref 'AWS::NoValue' , !Select [ 8, !Cidr [ !Ref VPCCIDR, 9, 8 ]] ]
+
+        VPCCIDR: !Ref VPCCIDR
+        CreatePrivateSubnets: !If [ConditionPublic, 'false', 'true' ]
+        CreatePublicSubnets: !If [ConditionPublic, 'true', 'false' ]
+        CreateNATGateways: 'false'
+      # Outputs --
+      #   VPCStack.Outputs.PrivateSubnet1AID
+      #   VPCStack.Outputs.PrivateSubnet1BID
+      #   VPCStack.Outputs.PrivateSubnet1CID
+      #   VPCStack.Outputs.PrivateSubnet2AID
+      #   VPCStack.Outputs.PrivateSubnet2BID
+      #   VPCStack.Outputs.PrivateSubnet2CID
+      #   VPCStack.Outputs.PrivateSubnet3AID
+      #   VPCStack.Outputs.PrivateSubnet3BID
+      #   VPCStack.Outputs.PrivateSubnet3CID
+      #   VPCStack.Outputs.VPCID
+
+
+
+  WorkloadStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/quickstart-cisco-crossworks-workload.template.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        KeyName: !Ref KeyName
+
+        # Networking parameters
+        VpcId: !GetAtt VPCStack.Outputs.VPCID
+        VPCCIDR: !Ref VPCCIDR   ##### used for SGs
+        InterfaceDeploymentMode: !Ref InterfaceDeploymentMode
+        NetworkChoice: !Ref NetworkChoice
+        ManagementVIPName: !Ref ManagementVIPName        
+        DataVIPName: !Ref DataVIPName    
+        Route53DomainName: !Ref Route53DomainName    
+        MgmtSubnet1Id: !GetAtt VPCStack.Outputs.PrivateSubnet1AID 
+        MgmtSubnet1Netmask: !Ref MgmtSubnet1Netmask
+        MgmtSubnet1Gateway: !Ref MgmtSubnet1Gateway
+
+        MgmtSubnet2Id: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
+        MgmtSubnet2Netmask: !Ref MgmtSubnet2Netmask
+        MgmtSubnet2Gateway: !Ref MgmtSubnet2Gateway
+
+        MgmtSubnet3Id: !GetAtt VPCStack.Outputs.PrivateSubnet3AID
+        MgmtSubnet3Netmask: !Ref MgmtSubnet3Netmask
+        MgmtSubnet3Gateway: !Ref MgmtSubnet3Gateway
+
+        UseExternalNLB: !Ref UseExternalNLB
+        DataSubnet1Id: !GetAtt VPCStack.Outputs.PrivateSubnet1BID 
+        DataSubnet1Netmask: !Ref DataSubnet1Netmask
+        DataSubnet1Gateway: !Ref DataSubnet1Gateway
+
+        DataSubnet2Id: !GetAtt VPCStack.Outputs.PrivateSubnet2BID 
+        DataSubnet2Netmask: !Ref DataSubnet2Netmask
+        DataSubnet2Gateway: !Ref DataSubnet2Gateway
+
+        DataSubnet3Id: !GetAtt VPCStack.Outputs.PrivateSubnet3BID 
+        DataSubnet3Netmask: !Ref DataSubnet3Netmask
+        DataSubnet3Gateway: !Ref DataSubnet3Gateway
+
+        DeviceSubnet1Id: !GetAtt VPCStack.Outputs.PrivateSubnet1CID
+        DeviceSubnet1Netmask: !Ref DeviceSubnet1Netmask
+        DeviceSubnet1Gateway: !Ref DeviceSubnet1Gateway
+
+        DeviceSubnet2Id: !GetAtt VPCStack.Outputs.PrivateSubnet2CID
+        DeviceSubnet2Netmask: !Ref DeviceSubnet2Netmask
+        DeviceSubnet3Gateway: !Ref DeviceSubnet2Gateway
+
+        DeviceSubnet3Id: !GetAtt VPCStack.Outputs.PrivateSubnet3CID
+        DeviceSubnet3Netmask: !Ref DeviceSubnet3Netmask
+        DeviceSubnet2Gateway: !Ref DeviceSubnet3Gateway
+        
+
+        
+         
+        
+
+        MgLBIPaddress1: !Ref MgLBIPaddress1
+        MgLBIPaddress2: !Ref MgLBIPaddress2
+        MgLBIPaddress3: !Ref MgLBIPaddress3
+        DtLBIPaddress1: !Ref DtLBIPaddress1
+        DtLBIPaddress2: !Ref DtLBIPaddress2
+        DtLBIPaddress3: !Ref DtLBIPaddress3
+
+        CDGOperPassword: !Ref CDGOperPassword
+        CdgPoolHostname: !Ref CdgPoolHostname
+        CdgInstanceHostname1: !Ref CdgInstanceHostname1
+        CdgInstanceHostname2: !Ref CdgInstanceHostname2
+
+        LBIPaddress1: !Ref LBIPaddress1
+        LBIPaddress2: !Ref LBIPaddress2
+        CDGProfile: !Ref CDGProfile
+
+        SSHPassword: !Ref SSHPassword
+        SkipAutoInstall: !Ref SkipAutoInstall
+        NsoPoolHostname: !Ref NsoPoolHostname
+
+        NsoLBIPaddress1: !Ref NsoLBIPaddress1
+        NsoLBIPaddress2: !Ref NsoLBIPaddress2
+        NsoHealthCheckPort:  !Ref NsoHealthCheckPort
+        NSO1Interface0IPAddress: !Ref NSO1Interface0IPAddress
+        NSO2Interface0IPAddress: !Ref NSO2Interface0IPAddress
+
+        CECid: !Ref CECid
+        Purpose: !Ref Purpose
+        Customer: !Ref Customer
+        AllocationOwner: !Ref AllocationOwner
+        CNCProductGroup: !Ref CNCProductGroup
+        SchedulingPolicy: !Ref SchedulingPolicy
+        SingleHybridNode: !Ref SingleHybridNode
+        EnforcePodReservations: !Ref EnforcePodReservations
+
+
+        #Needs a condition ifDataSubnet - todo
+
+        # CwDeviceSubnetId: !GetAtt VPCStack.Outputs.PrivateSubnet1CID 
+        # CwDeviceSubnetNetmask: !Ref CwDeviceSubnetNetmask
+        # CwDeviceSubnetGateway: !Ref CwDeviceSubnetGateway
+        # CwDeviceVIP: !Ref CwDeviceVIP
+
+        CwAmiId: !Ref CwAmiId
+        
+        InstanceType: !Ref InstanceType
+        DataDiskSize: !Ref DataDiskSize
+        K8sServiceNetwork: !Ref K8sServiceNetwork
+        K8sPodNetwork: !Ref K8sPodNetwork
+        Cw1MgmtIP: !Ref Cw1MgmtIP
+        Cw1DataIP: !Ref Cw1DataIP
+        Cw2MgmtIP: !Ref Cw2MgmtIP
+        Cw2DataIP: !Ref Cw2DataIP
+        Cw3MgmtIP: !Ref Cw3MgmtIP
+        Cw3DataIP: !Ref Cw3DataIP
+        CwClusterPlacementStrategy: !Ref CwClusterPlacementStrategy
+
+        NsoAmiId: !Ref NsoAmiId
+        CDGAmiId: !Ref CDGAmiId
+        SRPCEAmiId: !Ref SRPCEAmiId
+        WindowsAMI: !Ref WindowsAMI
+
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+
+
+
+
+

@@ -1,0 +1,794 @@
+AWSTemplateFormatVersion: 2010-09-09
+# Author - Sriharsha Dhanekula (hdhaneku@cisco.com)
+Description: "For Deploying IOS-XR VMs"
+
+
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair.
+
+  SRPCEAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide SR-PCE AMI ID.
+    Default:  ami-05e96d8ac51219d74
+
+  SecGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Pre-created security group to be applied. Must allow ingress access for ports 22, 30160:31560
+
+  # SRPCEInterface0IPAddress:
+  #   Type: String
+  #   Description: OPTIONAL - Enter a *free* IP address on the 1st subnet. If set to "0.0.0.0", an IP address will be allocated automatically .
+  #   Default: "0.0.0.0"
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})|^$
+
+  SRPCEInterface0SubnetNetmask:
+    Type: String
+    Description: Enter the subnet netmask in dotted decimal form, eg 255.255.255.0.
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  # SRPCEInterface1IPAddress:
+  #   Type: String
+  #   Description: OPTIONAL - Enter a *free* IP address on the 2nd subnet. If set to "0.0.0.0", an IP address will be allocated automatically .
+  #   Default: "0.0.0.0"
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})|^$
+
+  SRPCEInterface1SubnetNetmask:
+    Type: String
+    Description: Enter the subnet netmask in dotted decimal form, eg 255.255.255.0.
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    
+  SRPCEInterface0SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the first interface subnet for the SRPCE VM.
+
+  SRPCEInterface0Gateway:
+    Type: String
+    Description: Enter the  default gateway on the selected subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.10.1.1'
+
+  SRPCEInterface1SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the first interface subnet for the SRPCE VM. Ignored if not using dual interface mode.
+
+  SRPCEInterface1Gateway:
+    Type: String
+    Description: Enter the  default gateway on the selected  subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.10.3.1'
+
+  InstanceType:
+    Description: Enter EC2 instance type for the node instances.
+    Type: String
+    AllowedValues:
+      - c4.2xlarge
+      - m5.24xlarge
+      - m5n.24xlarge
+    Default: c4.2xlarge
+    
+# Conditions:
+
+#   Setif0IP: !Not
+#     - !Equals
+#       - !Ref SRPCEInterface0IPAddress
+#       - "0.0.0.0"
+
+#   Setif1IP: !Not
+#     - !Equals
+#       - !Ref SRPCEInterface1IPAddress
+#       - "0.0.0.0"
+Resources:
+
+  CommonLaunchTemplateSRPCE1:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-CommonLaunchTemplateSRPCE1
+      LaunchTemplateData:
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref 'KeyName'
+        ImageId: !Ref "SRPCEAmiId"
+        MetadataOptions:
+          HttpPutResponseHopLimit: 1
+          
+  SRPCEeth0:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-North-eth0-VM1"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses: 
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.0.151
+      SubnetId: !Ref SRPCEInterface0SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv1-eth0-${AWS::StackName}
+
+  SRPCEeth1:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-South-eth1-VM1"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses: 
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.2.151
+      SubnetId: !Ref SRPCEInterface1SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv1-eth1-${AWS::StackName}
+
+  SRPCE1:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonLaunchTemplateSRPCE1
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref SRPCEeth0
+          DeviceIndex: "0"
+        - NetworkInterfaceId: !Ref SRPCEeth1
+          DeviceIndex: "1"
+      Tags:
+        - Key: Name
+          Value: !Sub XRv1-${AWS::StackName}
+
+      UserData:
+        Fn::Base64: !Sub |
+          hostname IOSXR-1
+          username root
+           group root-lr
+           group cisco-support
+           password 7 046D1F1506324F412948574453
+          !
+          username july
+           group root-lr
+           group cisco-support
+           secret 10 $6$5f5Pv/ulqSgh5v/.$u2/HLVjFYHtg0duGY/x7UNy53U8xYiAeRnjhRRKpRPU2mq.7xGlror5Z14C3h4UilMXMas/S.neuNiB/B/GQH/
+          !
+          cdp
+          grpc
+           port 57400
+           no-tls
+           max-streams 128
+           max-streams-per-user 128
+           address-family dual
+           max-request-total 256
+           max-request-per-user 32
+          !
+          pce
+           address ipv4 6.1.1.101
+           api
+            user admin
+             password encrypted 121A0C0411045D5679
+            !
+           !
+          !
+          tpa
+           vrf default
+            address-family ipv4
+             default-route mgmt
+            !
+            address-family ipv6
+             default-route mgmt
+            !
+           !
+          !
+          line console
+           exec-timeout 0 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          line default
+           exec-timeout 0 0
+           width 0
+           length 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          vty-pool default 0 99
+          !
+          snmp-server community crosswork RO
+          snmp-server host 10.10.202.15 traps version 2c crosswork udp-port 1062
+          snmp-server host 10.10.207.18 traps version 2c crosswork udp-port 1062
+          snmp-server traps snmp linkup
+          snmp-server traps snmp linkdown
+          snmp-server traps isis all
+          snmp-server ifindex persist
+          snmp-server trap-source TenGigE0/0/0/0
+          !
+          ntp
+           server 169.254.169.123 source TenGigE0/0/0/0
+           update-calendar
+          !
+          call-home
+           service active
+           contact smart-licensing
+           profile CiscoTAC-1
+            active
+            destination transport-method email disable
+            destination transport-method http
+           !
+          !
+          netconf-yang agent
+           ssh
+          !
+          interface Loopback0
+           ipv4 address 6.1.1.101 255.255.255.255
+           no shutdown
+          !
+          interface tunnel-ip124
+           bandwidth 8000000
+           ipv4 address 10.10.215.12 255.255.255.0
+           tunnel mode gre ipv4
+           tunnel source ${SRPCEeth1.PrimaryPrivateIpAddress}
+           tunnel destination 10.10.248.10
+           no shutdown
+          !
+          interface MgmtEth0/RP0/CPU0/0
+           ipv4 address ${SRPCEeth0.PrimaryPrivateIpAddress} ${SRPCEInterface0SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          interface TenGigE0/0/0/0
+           cdp
+           ipv4 address ${SRPCEeth1.PrimaryPrivateIpAddress} ${SRPCEInterface1SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          route-policy SID($SID)
+            set label-index $SID
+          end-policy
+          !
+          route-policy DROP_ALL
+            drop
+          end-policy
+          !
+          router static
+           address-family ipv4 unicast
+            0.0.0.0/0 ${SRPCEInterface0Gateway}
+           !
+          !
+          router isis 100
+           net 49.0001.1921.5500.0101.00
+           distribute link-state
+           log adjacency changes
+           address-family ipv4 unicast
+            metric-style wide
+            mpls traffic-eng level-1-2
+            mpls traffic-eng router-id Loopback0
+            segment-routing mpls sr-prefer
+           !
+           interface Loopback0
+            passive
+            circuit-type level-2-only
+            address-family ipv4 unicast
+             prefix-sid index 101
+            !
+           !
+           interface tunnel-ip124
+            circuit-type level-2-only
+            point-to-point
+            address-family ipv4 unicast
+            !
+           !
+          !
+          router bgp 65001
+           bgp router-id 6.1.1.101
+           ibgp policy out enforce-modifications
+           address-family ipv4 unicast
+            network 6.1.1.101/32 route-policy SID(101)
+            allocate-label all
+           !
+           address-family link-state link-state
+           !
+           neighbor 6.1.1.100
+            remote-as 65001
+            update-source Loopback0
+            address-family ipv4 labeled-unicast
+            !
+            address-family link-state link-state
+            !
+           !
+          !
+          segment-routing
+           global-block 16000 17000
+          !
+          netconf agent tty
+          !
+          lldp
+          !
+          ssh server rate-limit 600
+          ssh server session-limit 110
+          ssh server v2
+          ssh server vrf default
+          ssh server netconf vrf default
+          telnet vrf default ipv4 server max-servers 100
+          end
+          
+  CommonLaunchTemplateSRPCE2:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-CommonLaunchTemplateSRPCE2
+      LaunchTemplateData:
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref 'KeyName'
+        ImageId: !Ref "SRPCEAmiId"
+        MetadataOptions:
+          HttpPutResponseHopLimit: 1
+          
+  SRPCE2eth0:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-North-eth0-VM2"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses: 
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.0.254
+      SubnetId: !Ref SRPCEInterface0SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv2-eth0-${AWS::StackName}
+
+  SRPCE2eth1:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-South-eth1-VM2"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses:
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.2.254
+      SubnetId: !Ref SRPCEInterface1SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv2-eth0-${AWS::StackName}
+
+  SRPCE2:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonLaunchTemplateSRPCE2
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref SRPCE2eth0
+          DeviceIndex: "0"
+        - NetworkInterfaceId: !Ref SRPCE2eth1
+          DeviceIndex: "1"
+      Tags:
+        - Key: Name
+          Value: !Sub XRv2-${AWS::StackName}
+
+      UserData:
+        Fn::Base64: !Sub |
+          hostname IOSXR-2
+          username root
+           group root-lr
+           group cisco-support
+           password 7 046D1F1506324F412948574453
+          !
+          username july
+           group root-lr
+           group cisco-support
+           secret 10 $6$5f5Pv/ulqSgh5v/.$u2/HLVjFYHtg0duGY/x7UNy53U8xYiAeRnjhRRKpRPU2mq.7xGlror5Z14C3h4UilMXMas/S.neuNiB/B/GQH/
+          !
+          cdp
+          grpc
+           port 57400
+           no-tls
+           max-streams 128
+           max-streams-per-user 128
+           address-family dual
+           max-request-total 256
+           max-request-per-user 32
+          !
+          pce
+           address ipv4 6.1.1.102
+           api
+            user admin
+             password encrypted 121A0C0411045D5679
+            !
+           !
+          !
+          tpa
+           vrf default
+            address-family ipv4
+             default-route mgmt
+            !
+            address-family ipv6
+             default-route mgmt
+            !
+           !
+          !
+          line console
+           exec-timeout 0 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          line default
+           exec-timeout 0 0
+           width 0
+           length 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          vty-pool default 0 99
+          !
+          snmp-server community crosswork RO
+          snmp-server host 10.10.202.15 traps version 2c crosswork udp-port 1062
+          snmp-server host 10.10.207.18 traps version 2c crosswork udp-port 1062
+          snmp-server traps snmp linkup
+          snmp-server traps snmp linkdown
+          snmp-server traps isis all
+          snmp-server ifindex persist
+          snmp-server trap-source TenGigE0/0/0/0
+          !
+          ntp
+           server 169.254.169.123 source TenGigE0/0/0/0
+           update-calendar
+          !
+          call-home
+           service active
+           contact smart-licensing
+           profile CiscoTAC-1
+            active
+            destination transport-method email disable
+            destination transport-method http
+           !
+          !
+          netconf-yang agent
+           ssh
+          !
+          interface Loopback0
+           ipv4 address 6.1.1.102 255.255.255.255
+           no shutdown
+          !
+          interface tunnel-ip124
+           bandwidth 8000000
+           ipv4 address 10.10.215.13 255.255.255.0
+           tunnel mode gre ipv4
+           tunnel source ${SRPCE2eth1.PrimaryPrivateIpAddress}
+           tunnel destination 10.10.248.10
+           no shutdown
+          !
+          interface MgmtEth0/RP0/CPU0/0
+           ipv4 address ${SRPCE2eth0.PrimaryPrivateIpAddress} ${SRPCEInterface0SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          interface TenGigE0/0/0/0
+           cdp
+           ipv4 address ${SRPCE2eth1.PrimaryPrivateIpAddress} ${SRPCEInterface1SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          route-policy SID($SID)
+            set label-index $SID
+          end-policy
+          !
+          route-policy DROP_ALL
+            drop
+          end-policy
+          !
+          router static
+           address-family ipv4 unicast
+            0.0.0.0/0 ${SRPCEInterface0Gateway}
+           !
+          !
+          router isis 100
+           net 49.0001.1921.5500.0101.00
+           distribute link-state
+           log adjacency changes
+           address-family ipv4 unicast
+            metric-style wide
+            mpls traffic-eng level-1-2
+            mpls traffic-eng router-id Loopback0
+            segment-routing mpls sr-prefer
+           !
+           interface Loopback0
+            passive
+            circuit-type level-2-only
+            address-family ipv4 unicast
+             prefix-sid index 101
+            !
+           !
+           interface tunnel-ip124
+            circuit-type level-2-only
+            point-to-point
+            address-family ipv4 unicast
+            !
+           !
+          !
+          router bgp 65001
+           bgp router-id 6.1.1.102
+           ibgp policy out enforce-modifications
+           address-family ipv4 unicast
+            network 6.1.1.101/32 route-policy SID(101)
+            allocate-label all
+           !
+           address-family link-state link-state
+           !
+           neighbor 6.1.1.100
+            remote-as 65001
+            update-source Loopback0
+            address-family ipv4 labeled-unicast
+            !
+            address-family link-state link-state
+            !
+           !
+          !
+          segment-routing
+           global-block 16000 17000
+          !
+          netconf agent tty
+          !
+          lldp
+          !
+          ssh server rate-limit 600
+          ssh server session-limit 110
+          ssh server v2
+          ssh server vrf default
+          ssh server netconf vrf default
+          telnet vrf default ipv4 server max-servers 100
+          end
+
+  CommonLaunchTemplateSRPCE3:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-CommonLaunchTemplateSRPCE3
+      LaunchTemplateData:
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref 'KeyName'
+        ImageId: !Ref "SRPCEAmiId"
+        MetadataOptions:
+          HttpPutResponseHopLimit: 1
+          
+  SRPCE3eth0:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-North-eth0-VM3"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses:
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.0.152
+      SubnetId: !Ref SRPCEInterface0SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv3-eth0-${AWS::StackName}
+
+  SRPCE3eth1:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "SR-PCE-South-eth1-VM3"
+      GroupSet:
+        - !Ref 'SecGroup'
+      # PrivateIpAddresses:
+      #   - Primary: true
+      #     PrivateIpAddress: 10.10.2.152
+      SubnetId: !Ref SRPCEInterface1SubnetId
+      Tags:
+        - Key: Name
+          Value: !Sub XRv3-eth1-${AWS::StackName}
+
+  SRPCE3:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonLaunchTemplateSRPCE3
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref SRPCE3eth0
+          DeviceIndex: "0"
+        - NetworkInterfaceId: !Ref SRPCE3eth1
+          DeviceIndex: "1"
+      Tags:
+        - Key: Name
+          Value: !Sub XRv3-${AWS::StackName}
+
+      UserData:
+        Fn::Base64: !Sub |
+          hostname IOSXR-3
+          username root
+           group root-lr
+           group cisco-support
+           password 7 046D1F1506324F412948574453
+          !
+          username july
+           group root-lr
+           group cisco-support
+           secret 10 $6$5f5Pv/ulqSgh5v/.$u2/HLVjFYHtg0duGY/x7UNy53U8xYiAeRnjhRRKpRPU2mq.7xGlror5Z14C3h4UilMXMas/S.neuNiB/B/GQH/
+          !
+          cdp
+          grpc
+           port 57400
+           no-tls
+           max-streams 128
+           max-streams-per-user 128
+           address-family dual
+           max-request-total 256
+           max-request-per-user 32
+          !
+          pce
+           address ipv4 6.1.1.103
+           api
+            user admin
+             password encrypted 121A0C0411045D5679
+            !
+           !
+          !
+          tpa
+           vrf default
+            address-family ipv4
+             default-route mgmt
+            !
+            address-family ipv6
+             default-route mgmt
+            !
+           !
+          !
+          line console
+           exec-timeout 0 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          line default
+           exec-timeout 0 0
+           width 0
+           length 0
+           absolute-timeout 0
+           session-timeout 0
+          !
+          vty-pool default 0 99
+          !
+          snmp-server community crosswork RO
+          snmp-server host 10.10.202.15 traps version 2c crosswork udp-port 1062
+          snmp-server host 10.10.207.18 traps version 2c crosswork udp-port 1062
+          snmp-server traps snmp linkup
+          snmp-server traps snmp linkdown
+          snmp-server traps isis all
+          snmp-server ifindex persist
+          snmp-server trap-source TenGigE0/0/0/0
+          !
+          ntp
+           server 169.254.169.123 source TenGigE0/0/0/0
+           update-calendar
+          !
+          call-home
+           service active
+           contact smart-licensing
+           profile CiscoTAC-1
+            active
+            destination transport-method email disable
+            destination transport-method http
+           !
+          !
+          netconf-yang agent
+           ssh
+          !
+          interface Loopback0
+           ipv4 address 6.1.1.103 255.255.255.255
+           no shutdown
+          !
+          interface tunnel-ip124
+           bandwidth 8000000
+           ipv4 address 10.10.215.14 255.255.255.0
+           tunnel mode gre ipv4
+           tunnel source ${SRPCE3eth1.PrimaryPrivateIpAddress}
+           tunnel destination 10.10.248.10
+           no shutdown
+          !
+          interface MgmtEth0/RP0/CPU0/0
+           ipv4 address ${SRPCE3eth0.PrimaryPrivateIpAddress} ${SRPCEInterface0SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          interface TenGigE0/0/0/0
+           cdp
+           ipv4 address ${SRPCE3eth1.PrimaryPrivateIpAddress} ${SRPCEInterface1SubnetNetmask}
+           load-interval 30
+           no shutdown
+          !
+          route-policy SID($SID)
+            set label-index $SID
+          end-policy
+          !
+          route-policy DROP_ALL
+            drop
+          end-policy
+          !
+          router static
+           address-family ipv4 unicast
+            0.0.0.0/0 ${SRPCEInterface0Gateway}
+           !
+          !
+          router isis 100
+           net 49.0001.1921.5500.0101.00
+           distribute link-state
+           log adjacency changes
+           address-family ipv4 unicast
+            metric-style wide
+            mpls traffic-eng level-1-2
+            mpls traffic-eng router-id Loopback0
+            segment-routing mpls sr-prefer
+           !
+           interface Loopback0
+            passive
+            circuit-type level-2-only
+            address-family ipv4 unicast
+             prefix-sid index 101
+            !
+           !
+           interface tunnel-ip124
+            circuit-type level-2-only
+            point-to-point
+            address-family ipv4 unicast
+            !
+           !
+          !
+          router bgp 65001
+           bgp router-id 6.1.1.103
+           ibgp policy out enforce-modifications
+           address-family ipv4 unicast
+            network 6.1.1.101/32 route-policy SID(101)
+            allocate-label all
+           !
+           address-family link-state link-state
+           !
+           neighbor 6.1.1.100
+            remote-as 65001
+            update-source Loopback0
+            address-family ipv4 labeled-unicast
+            !
+            address-family link-state link-state
+            !
+           !
+          !
+          segment-routing
+           global-block 16000 17000
+          !
+          netconf agent tty
+          !
+          lldp
+          !
+          ssh server rate-limit 600
+          ssh server session-limit 110
+          ssh server v2
+          ssh server vrf default
+          ssh server netconf vrf default
+          telnet vrf default ipv4 server max-servers 100
+          end
+
+
+
+Outputs:
+  SRPCECStack:
+    Description: The Name of the SRPCE cluster stack
+    Value: !Sub ${AWS::StackName}
+  SRPCE1MgmtIP:
+    Value: !GetAtt SRPCEeth0.PrimaryPrivateIpAddress
+  SRPCE1DataIP:
+    Value: !GetAtt SRPCEeth1.PrimaryPrivateIpAddress
+  SRPCE2MgmtIP:
+    Value: !GetAtt SRPCE2eth0.PrimaryPrivateIpAddress
+  SRPCE2DataIP:
+    Value: !GetAtt SRPCE2eth1.PrimaryPrivateIpAddress
+  SRPCE3MgmtIP:
+    Value: !GetAtt SRPCE3eth0.PrimaryPrivateIpAddress
+  SRPCE3DataIP:
+    Value: !GetAtt SRPCE3eth1.PrimaryPrivateIpAddress

@@ -1,0 +1,19 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-cf35ee
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value cncv4.1 for parameter name KeyName does
+not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  ----------------------------------------------------------------------------------------------
+2024-02-04 13:00:05.038000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-cf35ee  Parameter validation failed: parameter value cncv4.1 for parameter name KeyName does not exist
+2024-02-04 13:00:00.702000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-cf35ee  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Sunday, 04. February 2024 05:01AM
+-----------------------------------------------------------------------------
+

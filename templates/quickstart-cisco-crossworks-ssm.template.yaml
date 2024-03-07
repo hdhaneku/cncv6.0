@@ -1,0 +1,217 @@
+# Authored by Sriharsha Dhanekula (hdhaneku@cisco.com) and Josh Leatham (jlleatha@amazon.com)
+
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Creates VPC SSM endpoints and SSM Instance profile to log into instances without SSH'
+Parameters:
+  VPC: 
+    Type: String
+  VpcCIDR:
+    Type: String
+  PrivateSubnet1: 
+    Type: String
+  # PrivateSubnet2:
+  #   Type: String
+
+
+  SSMEndpoints:
+    Description: Would you like to have SSM endpoints created within your VPC?
+    Type: String
+    AllowedValues: 
+      - "true"
+      - "false"
+    Default: "true"
+
+  WindowsAMI:
+    Type: AWS::EC2::Image::Id
+    
+  KeyName:
+    Description: Pem file for access to created instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+  SecGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    
+Conditions:
+  CreateSSMEndpoints: !Equals [!Ref SSMEndpoints, "true"]
+
+Resources:
+
+  EndpointSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties: 
+      GroupName: EndpointIn
+      GroupDescription: Allow inbound traffic
+      SecurityGroupIngress:
+        - CidrIp: !Ref VpcCIDR
+          IpProtocol: "TCP"
+          FromPort: 443
+          ToPort: 443
+      Tags:
+        - Key: "Name"
+          Value: "AWS HTTPS Endpoints"
+      VpcId: !Ref VPC
+
+  EC2Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: CreateSSMEndpoints
+    Properties: 
+      VpcId: !Ref VPC
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2
+      SubnetIds: 
+        - !Ref PrivateSubnet1
+        # - !Ref PrivateSubnet2
+      SecurityGroupIds: 
+        - !Ref EndpointSG
+      PrivateDnsEnabled: True
+  EC2MessagesEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: CreateSSMEndpoints
+    Properties: 
+      VpcId: !Ref VPC
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      SubnetIds: 
+        - !Ref PrivateSubnet1
+        # - !Ref PrivateSubnet2
+      SecurityGroupIds: 
+        - !Ref EndpointSG
+      PrivateDnsEnabled: True
+  SSMEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: CreateSSMEndpoints
+    Properties: 
+      VpcId: !Ref VPC
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      SubnetIds: 
+        - !Ref PrivateSubnet1
+        # - !Ref PrivateSubnet2
+      SecurityGroupIds: 
+        - !Ref EndpointSG
+      PrivateDnsEnabled: True
+  SSMMessagesEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: CreateSSMEndpoints
+    Properties: 
+      VpcId: !Ref VPC
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      SubnetIds: 
+        - !Ref PrivateSubnet1
+        # - !Ref PrivateSubnet2
+      SecurityGroupIds: 
+        - !Ref EndpointSG
+      PrivateDnsEnabled: True
+
+  CfnEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPC
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.cloudformation"
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        # - !Ref PrivateSubnet2
+      SecurityGroupIds:
+        - !Ref EndpointSG
+
+
+  InstanceInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: /
+      Roles: 
+       - !Ref InstanceEc2InstanceRole
+  InstanceEc2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  InstanceInstancePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: InstancePolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ssm:DescribeAssociation
+              - ssm:GetDeployablePatchSnapshotForInstance
+              - ssm:GetDocument
+              - ssm:DescribeDocument
+              - ssm:GetManifest
+              - ssm:GetParameter
+              - ssm:GetParameters
+              - ssm:ListAssociations
+              - ssm:ListInstanceAssociations
+              - ssm:PutInventory
+              - ssm:PutComplianceItems
+              - ssm:PutConfigurePackageResult
+              - ssm:UpdateAssociationStatus
+              - ssm:UpdateInstanceAssociationStatus
+              - ssm:UpdateInstanceInformation
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - ssmmessages:CreateControlChannel
+              - ssmmessages:CreateDataChannel
+              - ssmmessages:OpenControlChannel
+              - ssmmessages:OpenDataChannel
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - ec2messages:AcknowledgeMessage
+              - ec2messages:DeleteMessage
+              - ec2messages:FailMessage
+              - ec2messages:GetEndpoint
+              - ec2messages:GetMessages
+              - ec2messages:SendReply
+            Resource: '*'
+      Roles:
+        -
+          !Ref InstanceEc2InstanceRole
+
+
+  #Temp
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref WindowsAMI
+      InstanceType: 't2.xlarge'
+      KeyName: !Ref KeyName
+      # SourceDestCheck: false
+      IamInstanceProfile: !Ref InstanceInstanceProfile
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          NetworkInterfaceId: !Ref InstanceInterface1 
+      Tags:
+        - Key: Name
+          Value: cw-windows-jump-host     
+
+  InstanceInterface1:
+    Type: AWS::EC2::NetworkInterface
+    Properties: 
+      SourceDestCheck: false
+      GroupSet: 
+        - !Ref SecGroup
+      SubnetId: !Ref PrivateSubnet1
+
+
+
+Outputs:
+  IAMProfileName:
+    Value: !Ref InstanceInstanceProfile
+    Description: The Profile Name to allow EC2 instances SSM Session Console access

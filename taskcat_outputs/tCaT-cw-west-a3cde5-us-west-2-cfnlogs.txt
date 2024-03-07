@@ -1,0 +1,170 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-a3cde5
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [WorkloadStack].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  -----------------------------------------------------------------
+2023-09-11 16:50:00.609000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-a3cde5  The following resource(s) failed to create: [WorkloadStack].
+2023-09-11 16:49:59.075000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  WorkloadStack        Template format error: YAML not well-formed. (line 13, column 20)
+2023-09-11 16:49:58.497000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  WorkloadStack
+2023-09-11 16:49:57.678000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  VPCStack
+2023-09-11 16:48:56.661000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack             Resource creation Initiated
+2023-09-11 16:48:55.704000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack
+2023-09-11 16:48:51.403000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-a3cde5  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Monday, 11. September 2023 09:50AM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-a3cde5-VPCStack-15IAHMQDMKUS3
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                           LogicalResourceId                           ResourceStatusReason
+--------------------------------  ------------------  -------------------------------------  ------------------------------------------  ---------------------------
+2023-09-11 16:49:55.668000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack             tCaT-cw-west-a3cde5-VPCStack-15IAHMQDMKUS3
+2023-09-11 16:49:50.859000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation
+2023-09-11 16:49:50.706000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound
+2023-09-11 16:49:50.702000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound
+2023-09-11 16:49:50.564000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound
+2023-09-11 16:49:50.555000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation
+2023-09-11 16:49:50.552000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound
+2023-09-11 16:49:50.516000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation
+2023-09-11 16:49:50.461000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound
+2023-09-11 16:49:50.354000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound
+2023-09-11 16:49:41.886000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation
+2023-09-11 16:49:41.669000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation
+2023-09-11 16:49:35.495000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation        Resource creation Initiated
+2023-09-11 16:49:35.434000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound      Resource creation Initiated
+2023-09-11 16:49:35.417000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound       Resource creation Initiated
+2023-09-11 16:49:35.309000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound       Resource creation Initiated
+2023-09-11 16:49:35.302000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound      Resource creation Initiated
+2023-09-11 16:49:35.197000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound       Resource creation Initiated
+2023-09-11 16:49:35.176000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation        Resource creation Initiated
+2023-09-11 16:49:35.141000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation        Resource creation Initiated
+2023-09-11 16:49:35.096000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound      Resource creation Initiated
+2023-09-11 16:49:34.955000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation
+2023-09-11 16:49:34.866000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound
+2023-09-11 16:49:34.854000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound
+2023-09-11 16:49:34.753000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound
+2023-09-11 16:49:34.739000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound
+2023-09-11 16:49:34.700000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation
+2023-09-11 16:49:34.666000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound
+2023-09-11 16:49:34.589000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound
+2023-09-11 16:49:34.571000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation
+2023-09-11 16:49:34.184000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl
+2023-09-11 16:49:33.931000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl
+2023-09-11 16:49:33.881000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl
+2023-09-11 16:49:33.821000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-09-11 16:49:33.567000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint                               Resource creation Initiated
+2023-09-11 16:49:31.946000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-09-11 16:49:31.936000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation
+2023-09-11 16:49:31.931000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation
+2023-09-11 16:49:31.905000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation
+2023-09-11 16:49:31.669000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.658000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.634000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.591000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.410000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation
+2023-09-11 16:49:31.368000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-09-11 16:49:31.360000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.318000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation
+2023-09-11 16:49:31.196000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.144000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.134000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:31.064000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation        Resource creation Initiated
+2023-09-11 16:49:30.430000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-09-11 16:49:30.239000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation
+2023-09-11 16:49:30.227000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation
+2023-09-11 16:49:30.148000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-09-11 16:49:30.130000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation
+2023-09-11 16:49:30.055000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation
+2023-09-11 16:49:30.035000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation
+2023-09-11 16:49:29.906000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-09-11 16:49:29.821000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation
+2023-09-11 16:49:29.793000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation
+2023-09-11 16:49:29.523000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable
+2023-09-11 16:49:29.493000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable
+2023-09-11 16:49:29.413000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-09-11 16:49:29.368000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable
+2023-09-11 16:49:29.351000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable
+2023-09-11 16:49:29.349000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable
+2023-09-11 16:49:29.192000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-09-11 16:49:29.113000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable
+2023-09-11 16:49:29.079000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable
+2023-09-11 16:49:21.503000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1C
+2023-09-11 16:49:21.450000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1A
+2023-09-11 16:49:21.373000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2B
+2023-09-11 16:49:21.347000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3A
+2023-09-11 16:49:21.323000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1B
+2023-09-11 16:49:21.299000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3B
+2023-09-11 16:49:21.112000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3C
+2023-09-11 16:49:21.095000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2A
+2023-09-11 16:49:21.078000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2C
+2023-09-11 16:49:18.956000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.937000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.896000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.888000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.885000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.876000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1C                             Resource creation Initiated
+2023-09-11 16:49:18.856000+00:00  CREATE_COMPLETE     AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-09-11 16:49:18.856000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A                             Resource creation Initiated
+2023-09-11 16:49:18.847000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.795000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2B                             Resource creation Initiated
+2023-09-11 16:49:18.763000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3A                             Resource creation Initiated
+2023-09-11 16:49:18.763000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1B                             Resource creation Initiated
+2023-09-11 16:49:18.738000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3B                             Resource creation Initiated
+2023-09-11 16:49:18.635000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl                   Resource creation Initiated
+2023-09-11 16:49:18.621000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.611000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation                   Resource creation Initiated
+2023-09-11 16:49:18.596000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.580000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable                   Resource creation Initiated
+2023-09-11 16:49:18.491000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2C                             Resource creation Initiated
+2023-09-11 16:49:18.478000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A                             Resource creation Initiated
+2023-09-11 16:49:18.468000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3C                             Resource creation Initiated
+2023-09-11 16:49:18.445000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl                   Resource creation Initiated
+2023-09-11 16:49:18.404000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl                   Resource creation Initiated
+2023-09-11 16:49:17.607000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable
+2023-09-11 16:49:17.503000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable
+2023-09-11 16:49:17.444000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A
+2023-09-11 16:49:17.443000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3B
+2023-09-11 16:49:17.443000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-09-11 16:49:17.442000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3A
+2023-09-11 16:49:17.436000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-09-11 16:49:17.422000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1B
+2023-09-11 16:49:17.417000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable
+2023-09-11 16:49:17.410000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable
+2023-09-11 16:49:17.409000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable
+2023-09-11 16:49:17.407000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable
+2023-09-11 16:49:17.398000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1C
+2023-09-11 16:49:17.393000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable
+2023-09-11 16:49:17.393000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3C
+2023-09-11 16:49:17.393000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2C
+2023-09-11 16:49:17.389000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-09-11 16:49:17.382000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2B
+2023-09-11 16:49:17.380000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl
+2023-09-11 16:49:17.378000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl
+2023-09-11 16:49:17.373000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A
+2023-09-11 16:49:17.365000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl
+2023-09-11 16:49:16.678000+00:00  CREATE_COMPLETE     AWS::EC2::VPC                          VPC
+2023-09-11 16:49:11.317000+00:00  CREATE_COMPLETE     AWS::EC2::DHCPOptions                  DHCPOptions
+2023-09-11 16:49:05.872000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC                                         Resource creation Initiated
+2023-09-11 16:49:05.701000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions                                 Resource creation Initiated
+2023-09-11 16:49:04.541000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC
+2023-09-11 16:49:04.423000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions
+2023-09-11 16:48:56.429000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack             tCaT-cw-west-a3cde5-VPCStack-15IAHMQDMKUS3  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Monday, 11. September 2023 09:50AM
+-----------------------------------------------------------------------------
+

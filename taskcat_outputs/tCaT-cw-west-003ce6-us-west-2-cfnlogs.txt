@@ -1,0 +1,19 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-003ce6
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value cncappdkey for parameter name KeyName
+does not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  -------------------------------------------------------------------------------------------------
+2024-02-13 23:59:26.999000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-003ce6  Parameter validation failed: parameter value cncappdkey for parameter name KeyName does not exist
+2024-02-13 23:59:23.628000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-003ce6  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 13. February 2024 04:00PM
+-----------------------------------------------------------------------------
+

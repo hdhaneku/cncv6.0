@@ -1,0 +1,19 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-66360d
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value ohiokeypair for parameter name KeyName
+does not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  --------------------------------------------------------------------------------------------------
+2024-02-04 13:31:05.211000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-66360d  Parameter validation failed: parameter value ohiokeypair for parameter name KeyName does not exist
+2024-02-04 13:31:01.345000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-66360d  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Sunday, 04. February 2024 05:32AM
+-----------------------------------------------------------------------------
+

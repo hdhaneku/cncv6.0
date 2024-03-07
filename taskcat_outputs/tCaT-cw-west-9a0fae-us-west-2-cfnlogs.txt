@@ -1,0 +1,19 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-9a0fae
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value veravich.cnc.2 for parameter name
+KeyName does not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  -----------------------------------------------------------------------------------------------------
+2024-02-04 13:04:38.480000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-9a0fae  Parameter validation failed: parameter value veravich.cnc.2 for parameter name KeyName does not exist
+2024-02-04 13:04:35.190000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-9a0fae  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Sunday, 04. February 2024 05:05AM
+-----------------------------------------------------------------------------
+

@@ -1,0 +1,198 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Wait Module.  Input the time you want to wait and a scheduled event in the future will tell
+  CloudFormation to continue once the time is up.  No outside Handle CallBack required.
+
+Parameters:
+  WaitTime:
+    Type: String
+    Default: '300'
+    Description: Time in Seconds to wait.  Must be below 43200 seconds (12 hours)
+  WaitTimePrefix:
+    Type: String
+    Default: myWaitTime
+    Description: Used in case you need to deploy multiple wait conditions in the same stack
+
+
+Resources:
+  WaitHandle:
+    Type: AWS::CloudFormation::WaitConditionHandle
+
+  WaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
+    Properties:
+      Handle: !Ref WaitHandle
+      Count: 1
+      Timeout: 43200 #Longest time 
+
+  WaitCallbackLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      Description: !Sub Creates EventBridge 1-time schedule ${WaitTime} seconds in the future. 
+      Timeout: 30
+      Environment:
+        Variables:
+          SIGNAL_URL: !Ref WaitHandle
+      Role: !GetAtt CfnLambdaRole.Arn
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |-
+          import json
+          import os
+          import urllib3
+          import uuid
+
+          def lambda_handler(event, context):
+
+            encoded_body = json.dumps({
+                "Status": "SUCCESS",
+                "Reason": "WaitTime is completed",
+                "UniqueId": str(uuid.uuid4()),
+                "Data": "WaitTime is completed"
+            })
+
+            http = urllib3.PoolManager()
+            r = http.request('PUT', os.environ['SIGNAL_URL'], body=encoded_body)   
+            print(f"response: {r.status}  :  {r.data}")       
+  
+  CustomWait:
+    Type: Custom::CustomWait
+    Properties:
+      ServiceToken: !GetAtt CustomWaitLambda.Arn
+      WaitTime: !Ref WaitTime
+      WaitLambdaArn: !GetAtt WaitCallbackLambda.Arn
+      WaitTimePrefix: !Ref WaitTimePrefix
+      CfnEventScheduleRole: !GetAtt CfnEventScheduleRole.Arn
+
+  CustomWaitLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: !Sub Creates EventBridge 1-time schedule ${WaitTime} seconds in the future. 
+      Runtime: python3.9
+      Timeout: 30
+      Role: !GetAtt CfnLambdaRole.Arn
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |-
+          import logging
+          import sys
+          from pip._internal import main
+          main(['install', '-I', '-q', 'boto3', '--target', '/tmp/', '--no-cache-dir', '--disable-pip-version-check'])
+          sys.path.insert(0,'/tmp/')
+          import boto3
+          import json
+          import cfnresponse
+          from botocore.exceptions import ClientError
+          from datetime import datetime, timedelta
+
+
+          log = logging.getLogger("handler")
+          log.setLevel(logging.INFO)
+
+          def lambda_handler(event, context):
+              try:
+                    log.info("Received event: %s", json.dumps(event))
+                    action = event["RequestType"]
+                    time_in_seconds = event["ResourceProperties"]["WaitTime"]
+                    wait_time_prefix = event["ResourceProperties"]["WaitTimePrefix"]
+                    wait_lambda_arn = event["ResourceProperties"]["WaitLambdaArn"]
+                    scheduler_role_arn = event["ResourceProperties"]["CfnEventScheduleRole"]
+                    time_stamp = create_time_stamp(time_in_seconds)
+                    print(f"ScheduleExpression = at({time_stamp})")
+                    eventclient = boto3.client('scheduler')
+                    if action == "Create":
+                        response = eventclient.create_schedule(
+                            Name=f'{wait_time_prefix}-cfnscheduler',
+                            ScheduleExpression=f"at({time_stamp})",
+                            State='ENABLED',
+                            Description='creates a one time event for cloud formation waitcondition',
+                            FlexibleTimeWindow={'Mode': 'OFF'},
+                            Target={'Arn': wait_lambda_arn,
+                                    'RoleArn' : scheduler_role_arn },
+                            ScheduleExpressionTimezone='UTC'                            
+                        )
+                        print(response)
+                                               
+                    if action == "Delete":
+                        log.info("Deleting rule")
+                        try:
+                            response = eventclient.delete_schedule(
+                                Name=f'{wait_time_prefix}-cfnscheduler'
+                            )
+                            print(response)
+                        except Exception as error:
+                            print(error)
+
+                    cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              except:
+                  log.exception("whoops")
+                  cfnresponse.send(
+                      event,
+                      context,
+                      cfnresponse.FAILED,
+                      {},
+                      reason="Caught exception, check logs",
+                  )
+          def create_time_stamp(time_in_seconds):
+              # Get the current time
+              now = datetime.now()
+              print(str(now))
+
+              # Add seconds to the current time
+              future = now + timedelta(seconds=int(time_in_seconds))
+              # Format the datetime object as a string with the desired format
+              future_formatted = future.strftime("%Y-%m-%dT%H:%M:%S")
+              print(future_formatted)
+              print(f"Type of stamp: {type(future_formatted)}")
+              return future_formatted            
+
+                        
+
+  CfnLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AllowCfnLambda
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  CfnEventScheduleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - scheduler.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AllowCfnLambda
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+
+

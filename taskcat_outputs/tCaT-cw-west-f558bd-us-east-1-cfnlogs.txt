@@ -1,0 +1,21 @@
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-cw-west-f558bd
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value ami-0569c4c8834787d0c for parameter name
+NsoAmiId does not exist, parameter value ami-07208dcb6481c3bd1 for parameter name
+WindowsAMI does not exist, parameter value ami-0f74523adda295a24 for parameter name
+SRPCEAmiId does not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2023-12-04 00:34:55.656000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-f558bd  Parameter validation failed: parameter value ami-0569c4c8834787d0c for parameter name NsoAmiId does not exist, parameter value ami-07208dcb6481c3bd1 for parameter name WindowsAMI does not exist, parameter value ami-0f74523adda295a24 for parameter name SRPCEAmiId does not exist
+2023-12-04 00:34:50.626000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-f558bd  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Sunday, 03. December 2023 04:35PM
+-----------------------------------------------------------------------------
+

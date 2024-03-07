@@ -1,0 +1,1314 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [WorkloadStack].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2023-11-14 20:54:51.282000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-08bf53  The following resource(s) failed to create: [WorkloadStack].
+2023-11-14 20:54:49.927000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  WorkloadStack        Embedded stack arn:aws:cloudformation:us-west-2:349160430253:stack/tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN/fe593bb0-832a-11ee-b6b2-023e393a27b5 was not successfully created: The following resource(s) failed to create: [CNCStack].
+2023-11-14 20:18:37.866000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  WorkloadStack        Resource creation Initiated
+2023-11-14 20:18:36.842000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  WorkloadStack
+2023-11-14 20:18:36.047000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  VPCStack
+2023-11-14 20:17:18.975000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack             Resource creation Initiated
+2023-11-14 20:17:17.777000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack
+2023-11-14 20:17:12.264000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-VPCStack-ZQQI1BT47KHW
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                           LogicalResourceId                          ResourceStatusReason
+--------------------------------  ------------------  -------------------------------------  -----------------------------------------  ---------------------------
+2023-11-14 20:18:23.542000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack             tCaT-cw-west-08bf53-VPCStack-ZQQI1BT47KHW
+2023-11-14 20:18:17.060000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation
+2023-11-14 20:18:16.807000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation
+2023-11-14 20:18:16.106000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation
+2023-11-14 20:18:08.695000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound
+2023-11-14 20:18:08.281000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound     Resource creation Initiated
+2023-11-14 20:18:08.125000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound
+2023-11-14 20:18:07.545000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound
+2023-11-14 20:18:07.471000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound      Resource creation Initiated
+2023-11-14 20:18:07.397000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound
+2023-11-14 20:18:07.393000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound
+2023-11-14 20:18:07.236000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound
+2023-11-14 20:18:07.152000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound      Resource creation Initiated
+2023-11-14 20:18:07.101000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryOutbound
+2023-11-14 20:18:07.015000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound      Resource creation Initiated
+2023-11-14 20:18:06.984000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound     Resource creation Initiated
+2023-11-14 20:18:06.901000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound     Resource creation Initiated
+2023-11-14 20:18:06.542000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation       Resource creation Initiated
+2023-11-14 20:18:06.352000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryInbound
+2023-11-14 20:18:06.293000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation       Resource creation Initiated
+2023-11-14 20:18:06.035000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryInbound
+2023-11-14 20:18:05.917000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet3BNetworkAclEntryOutbound
+2023-11-14 20:18:05.824000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet1BNetworkAclEntryOutbound
+2023-11-14 20:18:05.748000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAclEntry              PrivateSubnet2BNetworkAclEntryInbound
+2023-11-14 20:18:05.668000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation       Resource creation Initiated
+2023-11-14 20:18:05.226000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet3BNetworkAclAssociation
+2023-11-14 20:18:04.931000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet2BNetworkAclAssociation
+2023-11-14 20:18:04.216000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetNetworkAclAssociation  PrivateSubnet1BNetworkAclAssociation
+2023-11-14 20:18:03.117000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-11-14 20:18:02.818000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint                              Resource creation Initiated
+2023-11-14 20:18:01.382000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation
+2023-11-14 20:18:01.152000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation
+2023-11-14 20:18:01.116000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:01.033000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-11-14 20:18:01.022000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation
+2023-11-14 20:18:01+00:00         CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation
+2023-11-14 20:18:00.932000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-11-14 20:18:00.858000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.781000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.741000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.719000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.690000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.577000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl
+2023-11-14 20:18:00.575000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation
+2023-11-14 20:18:00.560000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl
+2023-11-14 20:18:00.393000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation
+2023-11-14 20:18:00.325000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl
+2023-11-14 20:18:00.189000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation
+2023-11-14 20:18:00.146000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:18:00.099000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:17:59.957000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-11-14 20:17:59.948000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation       Resource creation Initiated
+2023-11-14 20:17:59.657000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2CRouteTableAssociation
+2023-11-14 20:17:59.506000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-11-14 20:17:59.468000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3ARouteTableAssociation
+2023-11-14 20:17:59.382000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3CRouteTableAssociation
+2023-11-14 20:17:59.327000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1BRouteTableAssociation
+2023-11-14 20:17:59.208000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-11-14 20:17:58.846000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2BRouteTableAssociation
+2023-11-14 20:17:58.725000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1CRouteTableAssociation
+2023-11-14 20:17:58.560000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet3BRouteTableAssociation
+2023-11-14 20:17:56.155000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-11-14 20:17:56.089000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable
+2023-11-14 20:17:55.511000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable
+2023-11-14 20:17:55.486000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable
+2023-11-14 20:17:55.478000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-11-14 20:17:55.178000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable
+2023-11-14 20:17:55.152000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable
+2023-11-14 20:17:55.129000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable
+2023-11-14 20:17:54.871000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable
+2023-11-14 20:17:48.983000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3B
+2023-11-14 20:17:48.142000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2A
+2023-11-14 20:17:48.114000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2B
+2023-11-14 20:17:48.008000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3C
+2023-11-14 20:17:47.913000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet3A
+2023-11-14 20:17:47.702000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1C
+2023-11-14 20:17:47.398000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1A
+2023-11-14 20:17:47.322000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2C
+2023-11-14 20:17:47.228000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1B
+2023-11-14 20:17:46.219000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3B                            Resource creation Initiated
+2023-11-14 20:17:45.574000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable                  Resource creation Initiated
+2023-11-14 20:17:45.543000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable                  Resource creation Initiated
+2023-11-14 20:17:45.532000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A                            Resource creation Initiated
+2023-11-14 20:17:45.499000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2B                            Resource creation Initiated
+2023-11-14 20:17:45.404000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3C                            Resource creation Initiated
+2023-11-14 20:17:45.225000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3A                            Resource creation Initiated
+2023-11-14 20:17:45.132000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1C                            Resource creation Initiated
+2023-11-14 20:17:45.082000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl                  Resource creation Initiated
+2023-11-14 20:17:45.071000+00:00  CREATE_COMPLETE     AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-11-14 20:17:45.013000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable                  Resource creation Initiated
+2023-11-14 20:17:45.006000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl                  Resource creation Initiated
+2023-11-14 20:17:44.960000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.831000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A                            Resource creation Initiated
+2023-11-14 20:17:44.826000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation                  Resource creation Initiated
+2023-11-14 20:17:44.813000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.811000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3B
+2023-11-14 20:17:44.692000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.688000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl                  Resource creation Initiated
+2023-11-14 20:17:44.653000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.616000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1B                            Resource creation Initiated
+2023-11-14 20:17:44.612000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.566000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2C                            Resource creation Initiated
+2023-11-14 20:17:44.400000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable                  Resource creation Initiated
+2023-11-14 20:17:44.361000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-11-14 20:17:44.360000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1BRouteTable
+2023-11-14 20:17:44.262000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2B
+2023-11-14 20:17:44.202000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A
+2023-11-14 20:17:44.139000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3A
+2023-11-14 20:17:44.096000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet3C
+2023-11-14 20:17:43.975000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1C
+2023-11-14 20:17:43.966000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet2BNetworkAcl
+2023-11-14 20:17:43.871000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-11-14 20:17:43.792000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3CRouteTable
+2023-11-14 20:17:43.745000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet3BNetworkAcl
+2023-11-14 20:17:43.697000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-11-14 20:17:43.673000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A
+2023-11-14 20:17:43.603000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2CRouteTable
+2023-11-14 20:17:43.536000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1CRouteTable
+2023-11-14 20:17:43.497000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1B
+2023-11-14 20:17:43.469000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkAcl                   PrivateSubnet1BNetworkAcl
+2023-11-14 20:17:43.431000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3ARouteTable
+2023-11-14 20:17:43.310000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2BRouteTable
+2023-11-14 20:17:43.281000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2C
+2023-11-14 20:17:43.195000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet3BRouteTable
+2023-11-14 20:17:39.916000+00:00  CREATE_COMPLETE     AWS::EC2::VPC                          VPC
+2023-11-14 20:17:34.587000+00:00  CREATE_COMPLETE     AWS::EC2::DHCPOptions                  DHCPOptions
+2023-11-14 20:17:29.117000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC                                        Resource creation Initiated
+2023-11-14 20:17:29.076000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions                                Resource creation Initiated
+2023-11-14 20:17:27.832000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions
+2023-11-14 20:17:27.722000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC
+2023-11-14 20:17:18.667000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack             tCaT-cw-west-08bf53-VPCStack-ZQQI1BT47KHW  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [CNCStack].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                               ResourceStatusReason
+--------------------------------  ------------------  --------------------------  ----------------------------------------------  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2023-11-14 20:51:58.347000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN  The following resource(s) failed to create: [CNCStack].
+2023-11-14 20:51:57.093000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  WaitStackCDG
+2023-11-14 20:24:10.089000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  CNCStack                                        Embedded stack arn:aws:cloudformation:us-west-2:349160430253:stack/tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6/33d91080-832b-11ee-a8cd-0ae97a918111 was not successfully created: The following resource(s) failed to create: [CwInstance2, CwInstance3, CwInstance1].
+2023-11-14 20:22:26.046000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  SSMStack
+2023-11-14 20:20:08.268000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CNCStack                                        Resource creation Initiated
+2023-11-14 20:20:06.554000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CNCStack
+2023-11-14 20:20:00.934000+00:00  CREATE_COMPLETE     AWS::Route53::HostedZone    HostedZoneId
+2023-11-14 20:18:55.283000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  SSMStack                                        Resource creation Initiated
+2023-11-14 20:18:54.530000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  SSMStack
+2023-11-14 20:18:51.321000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroup     SecGroup
+2023-11-14 20:18:49.920000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     SecGroup                                        Resource creation Initiated
+2023-11-14 20:18:47.462000+00:00  CREATE_IN_PROGRESS  AWS::Route53::HostedZone    HostedZoneId                                    Resource creation Initiated
+2023-11-14 20:18:46.396000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  WaitStackCDG                                    Resource creation Initiated
+2023-11-14 20:18:45.923000+00:00  CREATE_IN_PROGRESS  AWS::Route53::HostedZone    HostedZoneId
+2023-11-14 20:18:45.640000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  WaitStackCDG
+2023-11-14 20:18:45.189000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     SecGroup
+2023-11-14 20:18:37.642000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                     ResourceStatusReason
+--------------------------------  ------------------  --------------------------  --------------------------------------------------------------------  ---------------------------
+2023-11-14 20:22:03.545000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ
+2023-11-14 20:22:02.182000+00:00  CREATE_COMPLETE     AWS::EC2::Instance          Instance
+2023-11-14 20:21:30.699000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          Instance                                                              Resource creation Initiated
+2023-11-14 20:21:28.782000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          Instance
+2023-11-14 20:21:28.346000+00:00  CREATE_COMPLETE     AWS::IAM::InstanceProfile   InstanceInstanceProfile
+2023-11-14 20:20:12.478000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       EC2MessagesEndpoint
+2023-11-14 20:20:12.456000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       EC2Endpoint
+2023-11-14 20:20:12.339000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       SSMEndpoint
+2023-11-14 20:20:12.204000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       CfnEndpoint
+2023-11-14 20:20:01.836000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       SSMMessagesEndpoint
+2023-11-14 20:19:33.141000+00:00  CREATE_COMPLETE     AWS::IAM::Policy            InstanceInstancePolicy
+2023-11-14 20:19:17.694000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   InstanceInstanceProfile                                               Resource creation Initiated
+2023-11-14 20:19:17.520000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Policy            InstanceInstancePolicy                                                Resource creation Initiated
+2023-11-14 20:19:16.303000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   InstanceInstanceProfile
+2023-11-14 20:19:16.262000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Policy            InstanceInstancePolicy
+2023-11-14 20:19:15.769000+00:00  CREATE_COMPLETE     AWS::IAM::Role              InstanceEc2InstanceRole
+2023-11-14 20:19:10.890000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  InstanceInterface1
+2023-11-14 20:19:07.174000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMEndpoint                                                           Resource creation Initiated
+2023-11-14 20:19:07.027000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2Endpoint                                                           Resource creation Initiated
+2023-11-14 20:19:06.958000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2MessagesEndpoint                                                   Resource creation Initiated
+2023-11-14 20:19:06.889000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMMessagesEndpoint                                                   Resource creation Initiated
+2023-11-14 20:19:06.779000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       CfnEndpoint                                                           Resource creation Initiated
+2023-11-14 20:19:05.344000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMEndpoint
+2023-11-14 20:19:05.224000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2MessagesEndpoint
+2023-11-14 20:19:05.210000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2Endpoint
+2023-11-14 20:19:05.208000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       CfnEndpoint
+2023-11-14 20:19:05.176000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMMessagesEndpoint
+2023-11-14 20:19:04.522000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroup     EndpointSG
+2023-11-14 20:19:03.531000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     EndpointSG                                                            Resource creation Initiated
+2023-11-14 20:18:59.856000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  InstanceInterface1                                                    Resource creation Initiated
+2023-11-14 20:18:59.632000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              InstanceEc2InstanceRole                                               Resource creation Initiated
+2023-11-14 20:18:58.492000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     EndpointSG
+2023-11-14 20:18:58.390000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  InstanceInterface1
+2023-11-14 20:18:58.369000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              InstanceEc2InstanceRole
+2023-11-14 20:18:55.186000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                              LogicalResourceId                                                          ResourceStatusReason
+--------------------------------  ------------------  ----------------------------------------  -------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:49:47.806000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW
+2023-11-14 20:49:46.927000+00:00  CREATE_COMPLETE     AWS::CloudFormation::WaitCondition        WaitCondition
+2023-11-14 20:19:25.359000+00:00  CREATE_COMPLETE     Custom::CustomWait                        CustomWait
+2023-11-14 20:19:25.154000+00:00  CREATE_IN_PROGRESS  Custom::CustomWait                        CustomWait                                                                 Resource creation Initiated
+2023-11-14 20:19:16.700000+00:00  CREATE_IN_PROGRESS  Custom::CustomWait                        CustomWait
+2023-11-14 20:19:15.338000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                     CustomWaitLambda
+2023-11-14 20:19:15.253000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                     WaitCallbackLambda
+2023-11-14 20:19:09.630000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     WaitCallbackLambda                                                         Resource creation Initiated
+2023-11-14 20:19:09.383000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     CustomWaitLambda                                                           Resource creation Initiated
+2023-11-14 20:19:08.247000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     WaitCallbackLambda
+2023-11-14 20:19:08.221000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     CustomWaitLambda
+2023-11-14 20:19:07.077000+00:00  CREATE_COMPLETE     AWS::IAM::Role                            CfnEventScheduleRole
+2023-11-14 20:19:07.037000+00:00  CREATE_COMPLETE     AWS::IAM::Role                            CfnLambdaRole
+2023-11-14 20:18:50.748000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnEventScheduleRole                                                       Resource creation Initiated
+2023-11-14 20:18:50.690000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnLambdaRole                                                              Resource creation Initiated
+2023-11-14 20:18:50.509000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitCondition        WaitCondition                                                              Resource creation Initiated
+2023-11-14 20:18:50.314000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitCondition        WaitCondition
+2023-11-14 20:18:49.815000+00:00  CREATE_COMPLETE     AWS::CloudFormation::WaitConditionHandle  WaitHandle
+2023-11-14 20:18:49.668000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitConditionHandle  WaitHandle                                                                 Resource creation Initiated
+2023-11-14 20:18:49.387000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitConditionHandle  WaitHandle
+2023-11-14 20:18:49.362000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnEventScheduleRole
+2023-11-14 20:18:49.320000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnLambdaRole
+2023-11-14 20:18:46.222000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [CwInstance2, CwInstance3, CwInstance1].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                     ResourceStatusReason
+--------------------------------  ------------------  --------------------------  --------------------------------------------------------------------  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2023-11-14 20:24:07.594000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6  The following resource(s) failed to create: [CwInstance2, CwInstance3, CwInstance1].
+2023-11-14 20:24:06.217000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  CwMgmtNlb
+2023-11-14 20:24:05.159000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  CwDataNlb
+2023-11-14 20:23:09.428000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance3                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 8d982f81-70a8-4ca1-9dfd-2c53d4176b4e; Proxy: null)
+2023-11-14 20:23:09.008000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance2                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 9c4b7df0-6e79-4f00-8779-87b7b20b25f2; Proxy: null)
+2023-11-14 20:23:08.613000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance3
+2023-11-14 20:23:08.315000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance2
+2023-11-14 20:23:08.254000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance1                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 67ac8c30-3394-46ab-a405-6ec95d9262bd; Proxy: null)
+2023-11-14 20:23:07.593000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance1
+2023-11-14 20:23:01.737000+00:00  CREATE_COMPLETE     AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate
+2023-11-14 20:22:59.744000+00:00  CREATE_IN_PROGRESS  AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate                                                Resource creation Initiated
+2023-11-14 20:22:54.930000+00:00  CREATE_IN_PROGRESS  AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate
+2023-11-14 20:22:51.287000+00:00  CREATE_COMPLETE     AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile
+2023-11-14 20:20:39.315000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile                                               Resource creation Initiated
+2023-11-14 20:20:38.243000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile
+2023-11-14 20:20:35.345000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwMgmtNlb                                                             Resource creation Initiated
+2023-11-14 20:20:34.806000+00:00  CREATE_COMPLETE     AWS::IAM::Role              EC2ENIRole
+2023-11-14 20:20:34.366000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwMgmtNlb
+2023-11-14 20:20:34.260000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwDataNlb                                                             Resource creation Initiated
+2023-11-14 20:20:33.320000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwDataNlb
+2023-11-14 20:20:29.809000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance3MgmntInterface
+2023-11-14 20:20:29.291000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance3DataInterface
+2023-11-14 20:20:29.246000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance2DataInterface
+2023-11-14 20:20:29.083000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance2MgmntInterface
+2023-11-14 20:20:29.070000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance1MgmntInterface
+2023-11-14 20:20:28.817000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance1DataInterface
+2023-11-14 20:20:19.273000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.677000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:18.671000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:18.536000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              EC2ENIRole                                                            Resource creation Initiated
+2023-11-14 20:20:18.474000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.420000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.241000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:17.836000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3MgmntInterface
+2023-11-14 20:20:17.384000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              EC2ENIRole
+2023-11-14 20:20:17.185000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2DataInterface
+2023-11-14 20:20:17.125000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3DataInterface
+2023-11-14 20:20:16.939000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1MgmntInterface
+2023-11-14 20:20:16.801000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2MgmntInterface
+2023-11-14 20:20:16.715000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1DataInterface
+2023-11-14 20:20:07.976000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:54.573000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+2023-11-14 20:23:52.092000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:47.527000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:47.159000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:47.150000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9                                                                              Resource creation Initiated
+2023-11-14 20:23:46.897000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7                                                                              Resource creation Initiated
+2023-11-14 20:23:46.488000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:46.271000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:46.231000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13                                                                             Resource creation Initiated
+2023-11-14 20:23:46.017000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8                                                                              Resource creation Initiated
+2023-11-14 20:23:45.798000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:45.706000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:45.525000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12                                                                             Resource creation Initiated
+2023-11-14 20:23:45.477000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:45.435000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:45.398000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener                                                                      Resource creation Initiated
+2023-11-14 20:23:45.329000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:45.248000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11                                                                             Resource creation Initiated
+2023-11-14 20:23:45.185000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:45.182000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4                                                                              Resource creation Initiated
+2023-11-14 20:23:45.180000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:45.060000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:45.011000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:45.005000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6                                                                              Resource creation Initiated
+2023-11-14 20:23:44.930000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5                                                                              Resource creation Initiated
+2023-11-14 20:23:44.890000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:44.876000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14                                                                             Resource creation Initiated
+2023-11-14 20:23:44.749000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10                                                                             Resource creation Initiated
+2023-11-14 20:23:44.644000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3                                                                              Resource creation Initiated
+2023-11-14 20:23:44.600000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.898000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord                                                                                  Resource creation Initiated
+2023-11-14 20:23:40.729000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:40.704000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:40.471000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15                                                                             Resource creation Initiated
+2023-11-14 20:23:40.416000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2                                                                              Resource creation Initiated
+2023-11-14 20:23:40.400000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:40.268000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:40.165000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener                                                                            Resource creation Initiated
+2023-11-14 20:23:40.032000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1                                                                              Resource creation Initiated
+2023-11-14 20:23:39.639000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:39.066000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:38.964000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:38.960000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:38.953000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:38.948000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:38.927000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:38.919000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:38.916000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:38.911000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:38.909000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:38.902000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:38.898000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:38.896000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:38.892000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:38.890000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:38.884000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:38.872000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:38.864000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:38.242000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:06.700000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB                                                                                     Resource creation Initiated
+2023-11-14 20:21:05.215000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:04.184000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:21:03.842000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:21:03.745000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:21:03.648000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:21:03.640000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:21:03.374000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:21:03.202000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:57.074000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:57.006000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:56.911000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:56.245000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:55.951000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:55.944000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:55.928000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:55.884000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:55.826000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:55.612000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:55.554000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:47.838000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9                                                                           Resource creation Initiated
+2023-11-14 20:20:47.759000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1                                                                           Resource creation Initiated
+2023-11-14 20:20:47.686000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2                                                                           Resource creation Initiated
+2023-11-14 20:20:47.647000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG                                                                           Resource creation Initiated
+2023-11-14 20:20:47.584000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7                                                                           Resource creation Initiated
+2023-11-14 20:20:47.400000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5                                                                           Resource creation Initiated
+2023-11-14 20:20:47.306000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4                                                                           Resource creation Initiated
+2023-11-14 20:20:40.107000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6                                                                           Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15                                                                          Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14                                                                          Resource creation Initiated
+2023-11-14 20:20:40.056000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10                                                                          Resource creation Initiated
+2023-11-14 20:20:39.895000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s                                                                         Resource creation Initiated
+2023-11-14 20:20:39.878000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13                                                                          Resource creation Initiated
+2023-11-14 20:20:39.845000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11                                                                          Resource creation Initiated
+2023-11-14 20:20:39.810000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3                                                                           Resource creation Initiated
+2023-11-14 20:20:39.805000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8                                                                           Resource creation Initiated
+2023-11-14 20:20:39.758000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:39.701000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12                                                                          Resource creation Initiated
+2023-11-14 20:20:38.778000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:38.740000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:38.735000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:38.713000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:38.696000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:20:38.678000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:38.668000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:38.666000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:20:38.659000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:38.655000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:38.651000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:20:38.649000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:20:38.645000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:38.629000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:38.628000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:20:38.614000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:20:38.581000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:38.576000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:35.144000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:51.451000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+2023-11-14 20:23:49.223000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:43.053000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:43.010000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:42.716000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6                                                                                 Resource creation Initiated
+2023-11-14 20:23:42.636000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5                                                                                 Resource creation Initiated
+2023-11-14 20:23:40.597000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:40.504000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:40.341000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.234000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.946000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord                                                                                Resource creation Initiated
+2023-11-14 20:23:37.596000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:37.567000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:37.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:37.466000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:37.319000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.198000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.108000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.019000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack                                                                         Resource creation Initiated
+2023-11-14 20:23:36.481000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:35.829000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:35.780000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:35.756000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:35.722000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:35.691000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:35.670000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:35.641000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:35.615000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:34.385000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:21:02.907000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB                                                                                       Resource creation Initiated
+2023-11-14 20:21:01.362000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:20:58.121000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:57.875000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:56.561000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:56.521000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:56.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:56.450000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:56.372000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:56.175000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:41.004000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6                                                                             Resource creation Initiated
+2023-11-14 20:20:40.823000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2                                                                             Resource creation Initiated
+2023-11-14 20:20:40.763000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack                                                                        Resource creation Initiated
+2023-11-14 20:20:40.684000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:40.676000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5                                                                             Resource creation Initiated
+2023-11-14 20:20:40.592000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3                                                                             Resource creation Initiated
+2023-11-14 20:20:40.544000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4                                                                             Resource creation Initiated
+2023-11-14 20:20:40.421000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1                                                                             Resource creation Initiated
+2023-11-14 20:20:39.633000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:39.549000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:39.503000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:39.485000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:39.433000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:39.408000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:39.371000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:39.266000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:34.038000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:54.573000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+2023-11-14 20:23:52.092000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:47.527000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:47.159000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:47.150000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9                                                                              Resource creation Initiated
+2023-11-14 20:23:46.897000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7                                                                              Resource creation Initiated
+2023-11-14 20:23:46.488000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:46.271000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:46.231000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13                                                                             Resource creation Initiated
+2023-11-14 20:23:46.017000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8                                                                              Resource creation Initiated
+2023-11-14 20:23:45.798000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:45.706000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:45.525000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12                                                                             Resource creation Initiated
+2023-11-14 20:23:45.477000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:45.435000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:45.398000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener                                                                      Resource creation Initiated
+2023-11-14 20:23:45.329000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:45.248000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11                                                                             Resource creation Initiated
+2023-11-14 20:23:45.185000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:45.182000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4                                                                              Resource creation Initiated
+2023-11-14 20:23:45.180000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:45.060000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:45.011000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:45.005000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6                                                                              Resource creation Initiated
+2023-11-14 20:23:44.930000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5                                                                              Resource creation Initiated
+2023-11-14 20:23:44.890000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:44.876000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14                                                                             Resource creation Initiated
+2023-11-14 20:23:44.749000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10                                                                             Resource creation Initiated
+2023-11-14 20:23:44.644000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3                                                                              Resource creation Initiated
+2023-11-14 20:23:44.600000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.898000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord                                                                                  Resource creation Initiated
+2023-11-14 20:23:40.729000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:40.704000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:40.471000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15                                                                             Resource creation Initiated
+2023-11-14 20:23:40.416000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2                                                                              Resource creation Initiated
+2023-11-14 20:23:40.400000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:40.268000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:40.165000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener                                                                            Resource creation Initiated
+2023-11-14 20:23:40.032000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1                                                                              Resource creation Initiated
+2023-11-14 20:23:39.639000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:39.066000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:38.964000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:38.960000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:38.953000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:38.948000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:38.927000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:38.919000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:38.916000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:38.911000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:38.909000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:38.902000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:38.898000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:38.896000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:38.892000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:38.890000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:38.884000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:38.872000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:38.864000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:38.242000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:06.700000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB                                                                                     Resource creation Initiated
+2023-11-14 20:21:05.215000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:04.184000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:21:03.842000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:21:03.745000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:21:03.648000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:21:03.640000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:21:03.374000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:21:03.202000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:57.074000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:57.006000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:56.911000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:56.245000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:55.951000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:55.944000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:55.928000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:55.884000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:55.826000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:55.612000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:55.554000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:47.838000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9                                                                           Resource creation Initiated
+2023-11-14 20:20:47.759000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1                                                                           Resource creation Initiated
+2023-11-14 20:20:47.686000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2                                                                           Resource creation Initiated
+2023-11-14 20:20:47.647000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG                                                                           Resource creation Initiated
+2023-11-14 20:20:47.584000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7                                                                           Resource creation Initiated
+2023-11-14 20:20:47.400000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5                                                                           Resource creation Initiated
+2023-11-14 20:20:47.306000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4                                                                           Resource creation Initiated
+2023-11-14 20:20:40.107000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6                                                                           Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15                                                                          Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14                                                                          Resource creation Initiated
+2023-11-14 20:20:40.056000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10                                                                          Resource creation Initiated
+2023-11-14 20:20:39.895000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s                                                                         Resource creation Initiated
+2023-11-14 20:20:39.878000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13                                                                          Resource creation Initiated
+2023-11-14 20:20:39.845000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11                                                                          Resource creation Initiated
+2023-11-14 20:20:39.810000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3                                                                           Resource creation Initiated
+2023-11-14 20:20:39.805000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8                                                                           Resource creation Initiated
+2023-11-14 20:20:39.758000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:39.701000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12                                                                          Resource creation Initiated
+2023-11-14 20:20:38.778000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:38.740000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:38.735000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:38.713000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:38.696000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:20:38.678000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:38.668000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:38.666000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:20:38.659000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:38.655000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:38.651000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:20:38.649000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:20:38.645000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:38.629000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:38.628000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:20:38.614000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:20:38.581000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:38.576000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:35.144000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:51.451000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+2023-11-14 20:23:49.223000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:43.053000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:43.010000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:42.716000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6                                                                                 Resource creation Initiated
+2023-11-14 20:23:42.636000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5                                                                                 Resource creation Initiated
+2023-11-14 20:23:40.597000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:40.504000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:40.341000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.234000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.946000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord                                                                                Resource creation Initiated
+2023-11-14 20:23:37.596000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:37.567000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:37.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:37.466000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:37.319000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.198000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.108000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.019000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack                                                                         Resource creation Initiated
+2023-11-14 20:23:36.481000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:35.829000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:35.780000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:35.756000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:35.722000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:35.691000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:35.670000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:35.641000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:35.615000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:34.385000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:21:02.907000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB                                                                                       Resource creation Initiated
+2023-11-14 20:21:01.362000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:20:58.121000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:57.875000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:56.561000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:56.521000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:56.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:56.450000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:56.372000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:56.175000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:41.004000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6                                                                             Resource creation Initiated
+2023-11-14 20:20:40.823000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2                                                                             Resource creation Initiated
+2023-11-14 20:20:40.763000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack                                                                        Resource creation Initiated
+2023-11-14 20:20:40.684000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:40.676000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5                                                                             Resource creation Initiated
+2023-11-14 20:20:40.592000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3                                                                             Resource creation Initiated
+2023-11-14 20:20:40.544000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4                                                                             Resource creation Initiated
+2023-11-14 20:20:40.421000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1                                                                             Resource creation Initiated
+2023-11-14 20:20:39.633000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:39.549000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:39.503000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:39.485000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:39.433000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:39.408000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:39.371000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:39.266000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:34.038000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                     ResourceStatusReason
+--------------------------------  ------------------  --------------------------  --------------------------------------------------------------------  ---------------------------
+2023-11-14 20:22:03.545000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ
+2023-11-14 20:22:02.182000+00:00  CREATE_COMPLETE     AWS::EC2::Instance          Instance
+2023-11-14 20:21:30.699000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          Instance                                                              Resource creation Initiated
+2023-11-14 20:21:28.782000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          Instance
+2023-11-14 20:21:28.346000+00:00  CREATE_COMPLETE     AWS::IAM::InstanceProfile   InstanceInstanceProfile
+2023-11-14 20:20:12.478000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       EC2MessagesEndpoint
+2023-11-14 20:20:12.456000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       EC2Endpoint
+2023-11-14 20:20:12.339000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       SSMEndpoint
+2023-11-14 20:20:12.204000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       CfnEndpoint
+2023-11-14 20:20:01.836000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint       SSMMessagesEndpoint
+2023-11-14 20:19:33.141000+00:00  CREATE_COMPLETE     AWS::IAM::Policy            InstanceInstancePolicy
+2023-11-14 20:19:17.694000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   InstanceInstanceProfile                                               Resource creation Initiated
+2023-11-14 20:19:17.520000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Policy            InstanceInstancePolicy                                                Resource creation Initiated
+2023-11-14 20:19:16.303000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   InstanceInstanceProfile
+2023-11-14 20:19:16.262000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Policy            InstanceInstancePolicy
+2023-11-14 20:19:15.769000+00:00  CREATE_COMPLETE     AWS::IAM::Role              InstanceEc2InstanceRole
+2023-11-14 20:19:10.890000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  InstanceInterface1
+2023-11-14 20:19:07.174000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMEndpoint                                                           Resource creation Initiated
+2023-11-14 20:19:07.027000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2Endpoint                                                           Resource creation Initiated
+2023-11-14 20:19:06.958000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2MessagesEndpoint                                                   Resource creation Initiated
+2023-11-14 20:19:06.889000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMMessagesEndpoint                                                   Resource creation Initiated
+2023-11-14 20:19:06.779000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       CfnEndpoint                                                           Resource creation Initiated
+2023-11-14 20:19:05.344000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMEndpoint
+2023-11-14 20:19:05.224000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2MessagesEndpoint
+2023-11-14 20:19:05.210000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       EC2Endpoint
+2023-11-14 20:19:05.208000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       CfnEndpoint
+2023-11-14 20:19:05.176000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint       SSMMessagesEndpoint
+2023-11-14 20:19:04.522000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroup     EndpointSG
+2023-11-14 20:19:03.531000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     EndpointSG                                                            Resource creation Initiated
+2023-11-14 20:18:59.856000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  InstanceInterface1                                                    Resource creation Initiated
+2023-11-14 20:18:59.632000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              InstanceEc2InstanceRole                                               Resource creation Initiated
+2023-11-14 20:18:58.492000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     EndpointSG
+2023-11-14 20:18:58.390000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  InstanceInterface1
+2023-11-14 20:18:58.369000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              InstanceEc2InstanceRole
+2023-11-14 20:18:55.186000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-SSMStack-XOH0HK3FAMIJ  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                              LogicalResourceId                                                          ResourceStatusReason
+--------------------------------  ------------------  ----------------------------------------  -------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:49:47.806000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW
+2023-11-14 20:49:46.927000+00:00  CREATE_COMPLETE     AWS::CloudFormation::WaitCondition        WaitCondition
+2023-11-14 20:19:25.359000+00:00  CREATE_COMPLETE     Custom::CustomWait                        CustomWait
+2023-11-14 20:19:25.154000+00:00  CREATE_IN_PROGRESS  Custom::CustomWait                        CustomWait                                                                 Resource creation Initiated
+2023-11-14 20:19:16.700000+00:00  CREATE_IN_PROGRESS  Custom::CustomWait                        CustomWait
+2023-11-14 20:19:15.338000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                     CustomWaitLambda
+2023-11-14 20:19:15.253000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                     WaitCallbackLambda
+2023-11-14 20:19:09.630000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     WaitCallbackLambda                                                         Resource creation Initiated
+2023-11-14 20:19:09.383000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     CustomWaitLambda                                                           Resource creation Initiated
+2023-11-14 20:19:08.247000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     WaitCallbackLambda
+2023-11-14 20:19:08.221000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                     CustomWaitLambda
+2023-11-14 20:19:07.077000+00:00  CREATE_COMPLETE     AWS::IAM::Role                            CfnEventScheduleRole
+2023-11-14 20:19:07.037000+00:00  CREATE_COMPLETE     AWS::IAM::Role                            CfnLambdaRole
+2023-11-14 20:18:50.748000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnEventScheduleRole                                                       Resource creation Initiated
+2023-11-14 20:18:50.690000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnLambdaRole                                                              Resource creation Initiated
+2023-11-14 20:18:50.509000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitCondition        WaitCondition                                                              Resource creation Initiated
+2023-11-14 20:18:50.314000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitCondition        WaitCondition
+2023-11-14 20:18:49.815000+00:00  CREATE_COMPLETE     AWS::CloudFormation::WaitConditionHandle  WaitHandle
+2023-11-14 20:18:49.668000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitConditionHandle  WaitHandle                                                                 Resource creation Initiated
+2023-11-14 20:18:49.387000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::WaitConditionHandle  WaitHandle
+2023-11-14 20:18:49.362000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnEventScheduleRole
+2023-11-14 20:18:49.320000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                            CfnLambdaRole
+2023-11-14 20:18:46.222000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-WaitStackCDG-1TQGTSM2Y9CYW  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [CwInstance2, CwInstance3, CwInstance1].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                     ResourceStatusReason
+--------------------------------  ------------------  --------------------------  --------------------------------------------------------------------  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2023-11-14 20:24:07.594000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6  The following resource(s) failed to create: [CwInstance2, CwInstance3, CwInstance1].
+2023-11-14 20:24:06.217000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  CwMgmtNlb
+2023-11-14 20:24:05.159000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  CwDataNlb
+2023-11-14 20:23:09.428000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance3                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 8d982f81-70a8-4ca1-9dfd-2c53d4176b4e; Proxy: null)
+2023-11-14 20:23:09.008000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance2                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 9c4b7df0-6e79-4f00-8779-87b7b20b25f2; Proxy: null)
+2023-11-14 20:23:08.613000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance3
+2023-11-14 20:23:08.315000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance2
+2023-11-14 20:23:08.254000+00:00  CREATE_FAILED       AWS::EC2::Instance          CwInstance1                                                           Volume of size 250GB is smaller than snapshot 'snap-0282210a5a81de739', expect size >= 260GB (Service: AmazonEC2; Status Code: 400; Error Code: InvalidBlockDeviceMapping; Request ID: 67ac8c30-3394-46ab-a405-6ec95d9262bd; Proxy: null)
+2023-11-14 20:23:07.593000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Instance          CwInstance1
+2023-11-14 20:23:01.737000+00:00  CREATE_COMPLETE     AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate
+2023-11-14 20:22:59.744000+00:00  CREATE_IN_PROGRESS  AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate                                                Resource creation Initiated
+2023-11-14 20:22:54.930000+00:00  CREATE_IN_PROGRESS  AWS::EC2::LaunchTemplate    CommonCwLaunchTemplate
+2023-11-14 20:22:51.287000+00:00  CREATE_COMPLETE     AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile
+2023-11-14 20:20:39.315000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile                                               Resource creation Initiated
+2023-11-14 20:20:38.243000+00:00  CREATE_IN_PROGRESS  AWS::IAM::InstanceProfile   CwEC2IamInstanceProfile
+2023-11-14 20:20:35.345000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwMgmtNlb                                                             Resource creation Initiated
+2023-11-14 20:20:34.806000+00:00  CREATE_COMPLETE     AWS::IAM::Role              EC2ENIRole
+2023-11-14 20:20:34.366000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwMgmtNlb
+2023-11-14 20:20:34.260000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwDataNlb                                                             Resource creation Initiated
+2023-11-14 20:20:33.320000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  CwDataNlb
+2023-11-14 20:20:29.809000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance3MgmntInterface
+2023-11-14 20:20:29.291000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance3DataInterface
+2023-11-14 20:20:29.246000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance2DataInterface
+2023-11-14 20:20:29.083000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance2MgmntInterface
+2023-11-14 20:20:29.070000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance1MgmntInterface
+2023-11-14 20:20:28.817000+00:00  CREATE_COMPLETE     AWS::EC2::NetworkInterface  CwInstance1DataInterface
+2023-11-14 20:20:19.273000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.677000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:18.671000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:18.536000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              EC2ENIRole                                                            Resource creation Initiated
+2023-11-14 20:20:18.474000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.420000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2MgmntInterface                                             Resource creation Initiated
+2023-11-14 20:20:18.241000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1DataInterface                                              Resource creation Initiated
+2023-11-14 20:20:17.836000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3MgmntInterface
+2023-11-14 20:20:17.384000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              EC2ENIRole
+2023-11-14 20:20:17.185000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2DataInterface
+2023-11-14 20:20:17.125000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance3DataInterface
+2023-11-14 20:20:16.939000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1MgmntInterface
+2023-11-14 20:20:16.801000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance2MgmntInterface
+2023-11-14 20:20:16.715000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NetworkInterface  CwInstance1DataInterface
+2023-11-14 20:20:07.976000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:54.573000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+2023-11-14 20:23:52.092000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:47.527000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:47.159000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:47.150000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9                                                                              Resource creation Initiated
+2023-11-14 20:23:46.897000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7                                                                              Resource creation Initiated
+2023-11-14 20:23:46.488000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:46.271000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:46.231000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13                                                                             Resource creation Initiated
+2023-11-14 20:23:46.017000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8                                                                              Resource creation Initiated
+2023-11-14 20:23:45.798000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:45.706000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:45.525000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12                                                                             Resource creation Initiated
+2023-11-14 20:23:45.477000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:45.435000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:45.398000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener                                                                      Resource creation Initiated
+2023-11-14 20:23:45.329000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:45.248000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11                                                                             Resource creation Initiated
+2023-11-14 20:23:45.185000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:45.182000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4                                                                              Resource creation Initiated
+2023-11-14 20:23:45.180000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:45.060000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:45.011000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:45.005000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6                                                                              Resource creation Initiated
+2023-11-14 20:23:44.930000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5                                                                              Resource creation Initiated
+2023-11-14 20:23:44.890000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:44.876000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14                                                                             Resource creation Initiated
+2023-11-14 20:23:44.749000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10                                                                             Resource creation Initiated
+2023-11-14 20:23:44.644000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3                                                                              Resource creation Initiated
+2023-11-14 20:23:44.600000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.898000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord                                                                                  Resource creation Initiated
+2023-11-14 20:23:40.729000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:40.704000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:40.471000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15                                                                             Resource creation Initiated
+2023-11-14 20:23:40.416000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2                                                                              Resource creation Initiated
+2023-11-14 20:23:40.400000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:40.268000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:40.165000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener                                                                            Resource creation Initiated
+2023-11-14 20:23:40.032000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1                                                                              Resource creation Initiated
+2023-11-14 20:23:39.639000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:39.066000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:38.964000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:38.960000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:38.953000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:38.948000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:38.927000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:38.919000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:38.916000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:38.911000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:38.909000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:38.902000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:38.898000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:38.896000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:38.892000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:38.890000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:38.884000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:38.872000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:38.864000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:38.242000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:06.700000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB                                                                                     Resource creation Initiated
+2023-11-14 20:21:05.215000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:04.184000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:21:03.842000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:21:03.745000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:21:03.648000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:21:03.640000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:21:03.374000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:21:03.202000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:57.074000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:57.006000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:56.911000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:56.245000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:55.951000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:55.944000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:55.928000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:55.884000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:55.826000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:55.612000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:55.554000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:47.838000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9                                                                           Resource creation Initiated
+2023-11-14 20:20:47.759000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1                                                                           Resource creation Initiated
+2023-11-14 20:20:47.686000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2                                                                           Resource creation Initiated
+2023-11-14 20:20:47.647000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG                                                                           Resource creation Initiated
+2023-11-14 20:20:47.584000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7                                                                           Resource creation Initiated
+2023-11-14 20:20:47.400000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5                                                                           Resource creation Initiated
+2023-11-14 20:20:47.306000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4                                                                           Resource creation Initiated
+2023-11-14 20:20:40.107000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6                                                                           Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15                                                                          Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14                                                                          Resource creation Initiated
+2023-11-14 20:20:40.056000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10                                                                          Resource creation Initiated
+2023-11-14 20:20:39.895000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s                                                                         Resource creation Initiated
+2023-11-14 20:20:39.878000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13                                                                          Resource creation Initiated
+2023-11-14 20:20:39.845000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11                                                                          Resource creation Initiated
+2023-11-14 20:20:39.810000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3                                                                           Resource creation Initiated
+2023-11-14 20:20:39.805000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8                                                                           Resource creation Initiated
+2023-11-14 20:20:39.758000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:39.701000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12                                                                          Resource creation Initiated
+2023-11-14 20:20:38.778000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:38.740000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:38.735000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:38.713000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:38.696000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:20:38.678000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:38.668000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:38.666000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:20:38.659000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:38.655000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:38.651000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:20:38.649000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:20:38.645000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:38.629000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:38.628000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:20:38.614000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:20:38.581000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:38.576000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:35.144000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:51.451000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+2023-11-14 20:23:49.223000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:43.053000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:43.010000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:42.716000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6                                                                                 Resource creation Initiated
+2023-11-14 20:23:42.636000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5                                                                                 Resource creation Initiated
+2023-11-14 20:23:40.597000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:40.504000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:40.341000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.234000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.946000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord                                                                                Resource creation Initiated
+2023-11-14 20:23:37.596000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:37.567000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:37.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:37.466000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:37.319000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.198000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.108000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.019000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack                                                                         Resource creation Initiated
+2023-11-14 20:23:36.481000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:35.829000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:35.780000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:35.756000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:35.722000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:35.691000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:35.670000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:35.641000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:35.615000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:34.385000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:21:02.907000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB                                                                                       Resource creation Initiated
+2023-11-14 20:21:01.362000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:20:58.121000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:57.875000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:56.561000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:56.521000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:56.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:56.450000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:56.372000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:56.175000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:41.004000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6                                                                             Resource creation Initiated
+2023-11-14 20:20:40.823000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2                                                                             Resource creation Initiated
+2023-11-14 20:20:40.763000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack                                                                        Resource creation Initiated
+2023-11-14 20:20:40.684000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:40.676000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5                                                                             Resource creation Initiated
+2023-11-14 20:20:40.592000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3                                                                             Resource creation Initiated
+2023-11-14 20:20:40.544000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4                                                                             Resource creation Initiated
+2023-11-14 20:20:40.421000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1                                                                             Resource creation Initiated
+2023-11-14 20:20:39.633000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:39.549000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:39.503000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:39.485000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:39.433000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:39.408000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:39.371000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:39.266000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:34.038000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:54.573000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K
+2023-11-14 20:23:52.092000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:47.527000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:47.159000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:47.150000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9                                                                              Resource creation Initiated
+2023-11-14 20:23:46.897000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7                                                                              Resource creation Initiated
+2023-11-14 20:23:46.488000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:46.271000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:46.231000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13                                                                             Resource creation Initiated
+2023-11-14 20:23:46.017000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8                                                                              Resource creation Initiated
+2023-11-14 20:23:45.798000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:45.706000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:45.525000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12                                                                             Resource creation Initiated
+2023-11-14 20:23:45.477000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:45.435000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:45.398000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener                                                                      Resource creation Initiated
+2023-11-14 20:23:45.329000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:45.248000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11                                                                             Resource creation Initiated
+2023-11-14 20:23:45.185000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:45.182000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4                                                                              Resource creation Initiated
+2023-11-14 20:23:45.180000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:45.060000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:45.011000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:45.005000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6                                                                              Resource creation Initiated
+2023-11-14 20:23:44.930000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5                                                                              Resource creation Initiated
+2023-11-14 20:23:44.890000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:44.876000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14                                                                             Resource creation Initiated
+2023-11-14 20:23:44.749000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10                                                                             Resource creation Initiated
+2023-11-14 20:23:44.644000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3                                                                              Resource creation Initiated
+2023-11-14 20:23:44.600000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.898000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord                                                                                  Resource creation Initiated
+2023-11-14 20:23:40.729000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:40.704000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:40.471000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15                                                                             Resource creation Initiated
+2023-11-14 20:23:40.416000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2                                                                              Resource creation Initiated
+2023-11-14 20:23:40.400000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:40.268000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:40.165000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener                                                                            Resource creation Initiated
+2023-11-14 20:23:40.032000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1                                                                              Resource creation Initiated
+2023-11-14 20:23:39.639000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               MyNLBRecord
+2023-11-14 20:23:39.066000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener3
+2023-11-14 20:23:38.964000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListenerSSH
+2023-11-14 20:23:38.960000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener13
+2023-11-14 20:23:38.953000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener9
+2023-11-14 20:23:38.948000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener7
+2023-11-14 20:23:38.927000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener2
+2023-11-14 20:23:38.919000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtK8sListener
+2023-11-14 20:23:38.916000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener12
+2023-11-14 20:23:38.911000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener14
+2023-11-14 20:23:38.909000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener8
+2023-11-14 20:23:38.902000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener6
+2023-11-14 20:23:38.898000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener15
+2023-11-14 20:23:38.896000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtReadinessListener
+2023-11-14 20:23:38.892000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener11
+2023-11-14 20:23:38.890000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener4
+2023-11-14 20:23:38.884000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener5
+2023-11-14 20:23:38.872000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener1
+2023-11-14 20:23:38.864000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwMgmtListener10
+2023-11-14 20:23:38.242000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:06.700000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB                                                                                     Resource creation Initiated
+2023-11-14 20:21:05.215000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  CwMgmtLB
+2023-11-14 20:21:04.184000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:21:03.842000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:21:03.745000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:21:03.648000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:21:03.640000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:21:03.374000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:21:03.202000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:57.074000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:57.006000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:56.911000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:56.245000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:55.951000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:55.944000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:55.928000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:55.884000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:55.826000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:55.612000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:55.554000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:47.838000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9                                                                           Resource creation Initiated
+2023-11-14 20:20:47.759000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1                                                                           Resource creation Initiated
+2023-11-14 20:20:47.686000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2                                                                           Resource creation Initiated
+2023-11-14 20:20:47.647000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG                                                                           Resource creation Initiated
+2023-11-14 20:20:47.584000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7                                                                           Resource creation Initiated
+2023-11-14 20:20:47.400000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5                                                                           Resource creation Initiated
+2023-11-14 20:20:47.306000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4                                                                           Resource creation Initiated
+2023-11-14 20:20:40.107000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6                                                                           Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15                                                                          Resource creation Initiated
+2023-11-14 20:20:40.067000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14                                                                          Resource creation Initiated
+2023-11-14 20:20:40.056000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10                                                                          Resource creation Initiated
+2023-11-14 20:20:39.895000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s                                                                         Resource creation Initiated
+2023-11-14 20:20:39.878000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13                                                                          Resource creation Initiated
+2023-11-14 20:20:39.845000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11                                                                          Resource creation Initiated
+2023-11-14 20:20:39.810000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3                                                                           Resource creation Initiated
+2023-11-14 20:20:39.805000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8                                                                           Resource creation Initiated
+2023-11-14 20:20:39.758000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:39.701000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12                                                                          Resource creation Initiated
+2023-11-14 20:20:38.778000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup10
+2023-11-14 20:20:38.740000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup5
+2023-11-14 20:20:38.735000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup14
+2023-11-14 20:20:38.713000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup8
+2023-11-14 20:20:38.696000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup9
+2023-11-14 20:20:38.678000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup3
+2023-11-14 20:20:38.668000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupK8s
+2023-11-14 20:20:38.666000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup7
+2023-11-14 20:20:38.659000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup11
+2023-11-14 20:20:38.655000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup6
+2023-11-14 20:20:38.651000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmntReadinessTG
+2023-11-14 20:20:38.649000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup2
+2023-11-14 20:20:38.645000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup13
+2023-11-14 20:20:38.629000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup15
+2023-11-14 20:20:38.628000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup4
+2023-11-14 20:20:38.614000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup1
+2023-11-14 20:20:38.581000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroupSSH
+2023-11-14 20:20:38.576000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwMgmtTargetGroup12
+2023-11-14 20:20:35.144000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwMgmtNlb-1ZJH5HD2GQ1K  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                               LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------------  -------------------------------------------------------------------------------------------  ---------------------------
+2023-11-14 20:23:51.451000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J
+2023-11-14 20:23:49.223000+00:00  CREATE_COMPLETE     AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:43.053000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:43.010000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:42.716000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6                                                                                 Resource creation Initiated
+2023-11-14 20:23:42.636000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5                                                                                 Resource creation Initiated
+2023-11-14 20:23:40.597000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:40.504000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:40.341000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH                                                                            Resource creation Initiated
+2023-11-14 20:23:40.234000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.946000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord                                                                                Resource creation Initiated
+2023-11-14 20:23:37.596000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:37.567000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:37.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:37.466000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:37.319000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.198000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.108000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4                                                                                 Resource creation Initiated
+2023-11-14 20:23:37.019000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack                                                                         Resource creation Initiated
+2023-11-14 20:23:36.481000+00:00  CREATE_IN_PROGRESS  AWS::Route53::RecordSetGroup               DataNLBRecord
+2023-11-14 20:23:35.829000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner5
+2023-11-14 20:23:35.780000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerSSH
+2023-11-14 20:23:35.756000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner6
+2023-11-14 20:23:35.722000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner3
+2023-11-14 20:23:35.691000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      CwDataListenerAstack
+2023-11-14 20:23:35.670000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner4
+2023-11-14 20:23:35.641000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner1
+2023-11-14 20:23:35.615000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::Listener      DataListner2
+2023-11-14 20:23:34.385000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:21:02.907000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB                                                                                       Resource creation Initiated
+2023-11-14 20:21:01.362000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::LoadBalancer  DataLB
+2023-11-14 20:20:58.121000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:57.875000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:56.561000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:56.521000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:56.498000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:56.450000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:56.372000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:56.175000+00:00  CREATE_COMPLETE     AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:41.004000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6                                                                             Resource creation Initiated
+2023-11-14 20:20:40.823000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2                                                                             Resource creation Initiated
+2023-11-14 20:20:40.763000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack                                                                        Resource creation Initiated
+2023-11-14 20:20:40.684000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH                                                                         Resource creation Initiated
+2023-11-14 20:20:40.676000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5                                                                             Resource creation Initiated
+2023-11-14 20:20:40.592000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3                                                                             Resource creation Initiated
+2023-11-14 20:20:40.544000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4                                                                             Resource creation Initiated
+2023-11-14 20:20:40.421000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1                                                                             Resource creation Initiated
+2023-11-14 20:20:39.633000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup6
+2023-11-14 20:20:39.549000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup2
+2023-11-14 20:20:39.503000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   CwDataTargetGroupSSH
+2023-11-14 20:20:39.485000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroupAstack
+2023-11-14 20:20:39.433000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup3
+2023-11-14 20:20:39.408000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup5
+2023-11-14 20:20:39.371000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup4
+2023-11-14 20:20:39.266000+00:00  CREATE_IN_PROGRESS  AWS::ElasticLoadBalancingV2::TargetGroup   DataTargetGroup1
+2023-11-14 20:20:34.038000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                 tCaT-cw-west-08bf53-WorkloadStack-RO6KWCCGW9BN-CNCStack-OD3STQ1RLYZ6-CwDataNlb-THCI7UFTV55J  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 14. November 2023 12:55PM
+-----------------------------------------------------------------------------
+

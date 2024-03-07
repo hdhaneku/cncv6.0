@@ -1,0 +1,1071 @@
+# CNC - Cisco 2022
+Description: "Sample CF Template for deploying Cisco Crosswork cluster Management NLB"
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "Cw Network Configuration"
+        Parameters:
+          - VpcId
+          - CwMgmtSubnet1Id
+          - CwMgmtSubnet2Id
+          - CwMgmtSubnet3Id
+          - CwTargetIP1
+          - CwTargetIP2
+          - CwTargetIP3
+          - MgLBIPaddress1
+          - MgLBIPaddress2
+          - MgLBIPaddress3
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+
+  CwMgmtSubnet1Id:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the 1st management subnet for the Crosswork VMs
+    Default: subnet-04de4dd5af5d12b38
+
+  CwMgmtSubnet2Id:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the 2nd management subnet for the Crosswork VMs
+    Default: subnet-0acd43579af9a2835
+
+  CwMgmtSubnet3Id:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the 3rd management subnet for the Crosswork VMs
+    Default: subnet-0acd43579af9a2835
+
+  CwTargetIP1:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwTargetIP2:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwTargetIP3:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Route53DomainName:
+    Description: Domain name used for all Route53 objects
+    Type: String
+    Default: "cwcisco.com"
+    
+  HostName:
+    Description: Domain name used for all Route53 objects
+    Type: String
+    Default: "cw-mgmt"
+
+  HostedZoneId:
+    Description: Hosted zone id
+    Type: AWS::Route53::HostedZone::Id #String
+    Default: Z0227555274KL9V9E3L58
+
+  MgLBIPaddress1:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 1. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  MgLBIPaddress2:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 2. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+  MgLBIPaddress3:
+    Description: OPTIONAL - Enter the devices IP address for the CW Mgmt Loadbalancer on the Mgmt Subnet 3. Leave as 0.0.0.0 for it to be auto assigned.
+    Type: String
+    Default: "0.0.0.0"
+
+Conditions:
+
+  IsAddr2Empty: !Equals
+    - !Ref CwTargetIP2
+    - ""
+
+  IsAddr3Empty: !Equals
+    - !Ref CwTargetIP3
+    - ""
+
+  MgmntSameSubnet1And2: !Equals
+    - !Ref CwMgmtSubnet1Id
+    - !Ref CwMgmtSubnet2Id
+
+  MgmntSameSubnet2And3: !Equals
+    - !Ref CwMgmtSubnet2Id
+    - !Ref CwMgmtSubnet3Id
+
+  MgmntSameSubnet1And3: !Equals
+    - !Ref CwMgmtSubnet1Id
+    - !Ref CwMgmtSubnet3Id
+
+  SetLBAddress1: !Not
+    - !Equals
+      - !Ref MgLBIPaddress1
+      - "0.0.0.0"
+  
+  SetLBAddress2: !Not
+    - !Equals
+      - !Ref MgLBIPaddress2
+      - "0.0.0.0"
+
+  SetLBAddress3: !Not
+    - !Equals
+      - !Ref MgLBIPaddress3
+      - "0.0.0.0" 
+  
+Resources:
+
+  # Create Target Groups for all exposed ports
+  CwMgmtTargetGroup1:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ui
+      Port: 30603
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30603
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30603
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30603
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmntReadinessTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-drui
+      Port: 30602
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30602
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30602
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30602
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup2:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ztp
+      Port: 30604
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30604
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30604
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30604
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup3:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-dreg
+      Port: 30606
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30606
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30606
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30606
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup4:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-dgmgr
+      Port: 30607
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30607
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30607
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30607
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup5:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-dggrpc
+      Port: 30608
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30608
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30608
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30608
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup6:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-magln
+      Port: 30649
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30649
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30649
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30649
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup7:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-astack
+      Port: 30650
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30650
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30650
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30650
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup8:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-kafka-1
+      Port: 30993
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30993
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30993
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30993
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup9:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-kafka-2
+      Port: 30994
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30994
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30994
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30994
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup10:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-kafka-3
+      Port: 30995
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30995
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30995
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30995
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup11:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ftp-1
+      Port: 30621
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30621
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30621
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30621
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup12:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-sftp
+      Port: 30622
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 30622
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 30622
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 30622
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup13:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ftp-2
+      Port: 31121
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 31121
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 31121
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 31121
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup14:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ftp-3
+      Port: 31122
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 31122
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 31122
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 31122
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroup15:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ftp-4
+      Port: 31123
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 31123
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 31123
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 31123
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroupK8s:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-k8s
+      Port: 6443
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: false
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 6443
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 6443
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 6443
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  CwMgmtTargetGroupSSH:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${HostName}-ssh
+      Port: 22
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.connection_termination.enabled
+          Value: true
+        - Key: preserve_client_ip.enabled
+          Value: true
+      Targets:
+        -
+          Id: !Ref CwTargetIP1
+          Port: 22
+        - !If
+          - IsAddr2Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP2
+            Port: 22
+        - !If
+          - IsAddr3Empty
+          - !Ref AWS::NoValue
+          - Id: !Ref CwTargetIP3
+            Port: 22
+      TargetType: ip
+      VpcId: !Ref VpcId
+
+  # Create a Network Load Balancer for Crosswork
+  CwMgmtLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn:
+      - CwMgmtTargetGroup1
+      - CwMgmtTargetGroup2
+      - CwMgmtTargetGroup3
+      - CwMgmtTargetGroup4
+      - CwMgmtTargetGroup5
+      - CwMgmtTargetGroup6
+      - CwMgmtTargetGroup7
+      - CwMgmtTargetGroup8
+      - CwMgmtTargetGroup9
+      - CwMgmtTargetGroup10
+      - CwMgmtTargetGroup11
+      - CwMgmtTargetGroup12
+      - CwMgmtTargetGroup13
+      - CwMgmtTargetGroup14
+      - CwMgmtTargetGroup15
+      - CwMgmtTargetGroupSSH
+      - CwMgmntReadinessTG
+      - CwMgmtTargetGroupK8s
+    Properties:
+      IpAddressType: ipv4
+      LoadBalancerAttributes:
+        - Key: load_balancing.cross_zone.enabled
+          Value: true
+      Name: !Sub ${HostName}-mglb
+      Scheme: internal
+      SubnetMappings: !If
+        - MgmntSameSubnet2And3
+        - Fn::If:
+            - MgmntSameSubnet1And2
+            - - SubnetId: !Ref CwMgmtSubnet1Id
+                PrivateIPv4Address: !If
+                  - SetLBAddress1
+                  - !Sub ${MgLBIPaddress1}
+                  - !Ref AWS::NoValue
+            - - SubnetId: !Ref CwMgmtSubnet1Id
+                PrivateIPv4Address: !If
+                  - SetLBAddress1
+                  - !Sub ${MgLBIPaddress1}
+                  - !Ref AWS::NoValue
+              - SubnetId: !Ref CwMgmtSubnet2Id
+                PrivateIPv4Address: !If
+                  - SetLBAddress2
+                  - !Sub ${MgLBIPaddress2}
+                  - !Ref AWS::NoValue
+        - Fn::If:
+            - MgmntSameSubnet1And2
+            - - SubnetId: !Ref CwMgmtSubnet1Id
+                PrivateIPv4Address: !If
+                  - SetLBAddress1
+                  - !Sub ${MgLBIPaddress1}
+                  - !Ref AWS::NoValue
+              - SubnetId: !Ref CwMgmtSubnet3Id
+                PrivateIPv4Address: !If
+                  - SetLBAddress3
+                  - !Sub ${MgLBIPaddress3}
+                  - !Ref AWS::NoValue
+            - Fn::If:
+                - MgmntSameSubnet1And3
+                - - SubnetId: !Ref CwMgmtSubnet1Id
+                    PrivateIPv4Address: !If
+                      - SetLBAddress1
+                      - !Sub ${MgLBIPaddress1}
+                      - !Ref AWS::NoValue
+                  - SubnetId: !Ref CwMgmtSubnet2Id
+                    PrivateIPv4Address: !If
+                      - SetLBAddress2
+                      - !Sub ${MgLBIPaddress2}
+                      - !Ref AWS::NoValue
+                - - SubnetId: !Ref CwMgmtSubnet1Id
+                    PrivateIPv4Address: !If
+                      - SetLBAddress1
+                      - !Sub ${MgLBIPaddress1}
+                      - !Ref AWS::NoValue
+                  - SubnetId: !Ref CwMgmtSubnet2Id
+                    PrivateIPv4Address: !If
+                      - SetLBAddress2
+                      - !Sub ${MgLBIPaddress2}
+                      - !Ref AWS::NoValue
+                  - SubnetId: !Ref CwMgmtSubnet3Id
+                    PrivateIPv4Address: !If
+                      - SetLBAddress3
+                      - !Sub ${MgLBIPaddress3}
+                      - !Ref AWS::NoValue
+      Type: network
+      Tags:
+        - Key: cisco:allocation:business-group
+          Value: "SPNAA:CNC"
+        - Key: cisco:allocation:owner
+          #Which functional group is responsible for this workload
+          #Value one of:
+          #development
+          #marketing
+          #test
+          #automation
+          Value: ""
+        - Key: cisco:allocation:product-group
+          #Identify the CNC component group
+          #Value one of:
+          #CW-Infra
+          #CDG
+          #NSO
+          #XR
+          #SIT
+          #BuildAutomation
+          #App:<name of app>
+          Value: ""
+        - Key: cisco:allocation:userid
+          #Cisco user id
+          Value: ""
+        - Key: cisco:allocation:product-release
+          #Identify product release version
+          Value: "5.0.0"
+        - Key: cisco:allocation:customer-id
+          #Identify customer name or PID
+          Value: ""
+        - Key: cisco:allocation:ticket-id
+          #Relate to specific open ticket if any
+          Value: ""
+        - Key: cisco:operations:owner
+          #Which team is responsible for the creation and maintenance of the resource
+          #cw-build
+          #other
+          Value: ""
+        - Key: cisco:operations:schedule
+          #pst-office-hours
+          #ist-office-hours
+          #eu-office-hours
+          #work-week-restart
+          #pst-till-end-of-day-terminate
+          #pst-till-end-of-day-shut
+          #eu-till-end-of-day-shut
+          #till-end-of-week-terminate
+          #till-end-of-week-shut
+          #no-schedule
+          Value: "eu-till-end-of-day-shut"
+        - Key: cisco:operations:purpose
+          #Value one of:
+          #infra
+          #build
+          #development
+          #test
+          Value: ""
+        - Key: cisco:operations:cnc-cluster-id
+          Value: !Sub ${AWS::StackName}
+        - Key: cisco:operations:termination-protection
+          #Designates whether the VM is not meant to be terminated, even after being shut down
+          #True/False
+          Value: ""
+        - Key: cisco:security:posture
+          #Classify the resources security posture in terms of access
+          #private
+          #internet
+          Value: ""
+        - Key: cisco:data:classification
+          #Classify the data container/represented by the resource
+          #public, private, confidential, restricted
+          Value: ""
+
+  # Create Listner for NLB
+  CwMgmtListener1:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup1
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup1
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30603
+      Protocol: TCP
+
+  CwMgmtReadinessListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroupK8s
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroupK8s
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 6443
+      Protocol: TCP
+
+  CwMgmtK8sListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmntReadinessTG
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmntReadinessTG
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30602
+      Protocol: TCP
+
+  CwMgmtListener2:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup2
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup2
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30604
+      Protocol: TCP
+
+  CwMgmtListener3:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup3
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup3
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30606
+      Protocol: TCP
+
+  CwMgmtListener4:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup4
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup4
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30607
+      Protocol: TCP
+
+  CwMgmtListener5:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup5
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup5
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30608
+      Protocol: TCP
+
+  CwMgmtListener6:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup6
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup6
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30649
+      Protocol: TCP
+
+  CwMgmtListener7:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup7
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup7
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30650
+      Protocol: TCP
+
+  CwMgmtListener8:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup8
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup8
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30993
+      Protocol: TCP
+
+  CwMgmtListener9:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup9
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup9
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30994
+      Protocol: TCP
+
+  CwMgmtListener10:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup10
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup10
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30995
+      Protocol: TCP
+
+  CwMgmtListener11:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup11
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup11
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30621
+      Protocol: TCP
+
+  CwMgmtListener12:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup12
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup12
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 30622
+      Protocol: TCP
+
+  CwMgmtListener13:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup13
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup13
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 31121
+      Protocol: TCP
+
+  CwMgmtListener14:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup14
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup14
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 31122
+      Protocol: TCP
+
+  CwMgmtListener15:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroup15
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroup15
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 31123
+      Protocol: TCP
+
+  CwMgmtListenerSSH:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    # DependsOn:
+    #   - CwMgmtTargetGroupSSH
+    #   - CwMgmtLB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CwMgmtTargetGroupSSH
+      LoadBalancerArn: !Ref CwMgmtLB
+      Port: 22
+      Protocol: TCP
+
+  # Creating FQDN record in Route53 for NLB
+  MyNLBRecord:
+    Type: AWS::Route53::RecordSetGroup
+    # DependsOn:
+    #   - CwMgmtLB
+    Properties:
+      RecordSets:
+        - Name: !Sub ${HostName}.${Route53DomainName}
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt CwMgmtLB.DNSName
+            HostedZoneId: !GetAtt CwMgmtLB.CanonicalHostedZoneID
+      HostedZoneId: !Ref HostedZoneId
+
+Outputs:
+
+  CwMgmtLBName:
+    Value: !GetAtt CwMgmtLB.LoadBalancerName
+  CwMgmtLBDNSName:
+    Value: !GetAtt CwMgmtLB.DNSName
+  CwMgmtRoute53RecordName:
+    Value: !Sub ${HostName}.${Route53DomainName}

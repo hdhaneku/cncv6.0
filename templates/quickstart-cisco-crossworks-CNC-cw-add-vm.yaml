@@ -1,0 +1,716 @@
+# Cisco CNC v5.0 - 2023
+# Single Cw Hybrid/Worker node template
+# A replacement Hybrid node MUST reuse the same IP addresses as the Hybrid VM it is replacing.
+
+Description: "Sample CF Template for deploying single hybrid cluster or any worker VM Cisco Crosswork nodes on EC2. Do not use this template to deploy multi-hybrid clusters."
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "Cw Network Configuration"
+        Parameters:
+          - VpcId
+          - SecGroup
+          - EC2ENIRole
+          - CwSSHPassword
+          - CwAmiId
+          - CwNodeType
+          - UseExternalNLB
+          - Route53DomainName
+          - ManagementVIPName
+          - DataVIPName
+          - CwMgmtSubnetId
+          - CwMgmtSubnetNetmask
+          - CwMgmtSubnetGateway
+          - InterfaceDeploymentMode
+          - CwDataSubnetId
+          - CwDataSubnetNetmask
+          - CwDataSubnetGateway
+          - DeploymentPlatform
+
+      - Label:
+          default: "Cw VM customization"
+        Parameters:
+          - InstanceType
+          - DataDiskSize
+          - K8sServiceNetwork
+          - K8sPodNetwork
+      - Label:
+          default: "OPTIONAL - VM IP addressing"
+        Parameters:
+          - Cw1MgmtIP
+          - Cw1DataIP
+      - Label:
+          default: "OPTIONAL - Only when not using external NLB"
+        Parameters:
+          - CwMgmtVIP
+          - CwDataVIP
+          - OtherCwMgmtIP1
+          - OtherCwDataIP1
+          - OtherCwMgmtIP2
+          - OtherCwDataIP2
+      - Label:
+          default: "Cisco CNC Team use ONLY"
+        Parameters:
+          - CECid
+          - Purpose
+          - Customer
+          - AllocationOwner
+          - CNCProductGroup
+          - SchedulingPolicy
+
+Parameters:
+  DeploymentPlatform:
+    Type: String
+    Description: The Cw deployment platform
+    Default: "EC2"
+    AllowedValues:
+      - "EKS"
+      - "EC2"
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+
+  SecGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Pre-created security group to be applied. Must allow ingress access for ports 22, 30160:31560
+
+  CwMgmtSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the management subnet for the Crosswork VMs
+
+  CwMgmtSubnetNetmask:
+    Type: String
+    Description: Enter the management subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwMgmtSubnetGateway:
+    Type: String
+    Description: Enter the management default gateway on the selected management subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwDataSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the data subnet for the Crosswork VMs. In single interface deployments select the same subnet as for the management interface.
+
+  InterfaceDeploymentMode:
+    Type: String
+    Description: Select 1 (Management only) or 2 (Management + Data) interface deployment mode.
+    Default: 1
+    AllowedValues:
+      - 1
+      - 2
+
+  CwDataSubnetNetmask:
+    Type: String
+    Description: Enter the data subnet netmask in dotted decimal form, eg 255.255.255.0. Ignored when deploying in single interface mode.
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwDataSubnetGateway:
+    Type: String
+    Description: Enter the management default gateway on the selectec data subnet. This is typically the first address on the subnet. Ignored when deploying in single interface mode.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '0.0.0.0'
+
+  CwAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide Crosswork AMI ID.
+    Default: ami-0b39cac5265de3611
+
+  #  MgmntPublicIP:
+  #    Type: String
+  #    Description: Enter your public IP. Will be use to restrict CNC SSH and UI access to this IP only
+  #    Default: 0.0.0.0/0
+
+  CwSSHPassword:
+    Type: String
+    Description: Enter existing Cw SSH Password. NOTE; Use of external secret store is recommended.
+    NoEcho: True
+
+  InstanceType:
+    Description: Enter EC2 instance type for the node instances.
+    Type: String
+    AllowedValues:
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.12xlarge
+      - m5d.4xlarge
+      - m5d.8xlarge
+      - m5d.2xlarge
+      - m5d.12xlarge
+      - m5n.4xlarge
+      - m5n.8xlarge
+      - m5n.2xlarge
+      - m5n.12xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+      - r5.2xlarge
+      - r5.12xlarge
+      - c5.4xlarge
+      - c5.8xlarge
+      - c5.2xlarge
+      - c5.12xlarge
+      - m5zn.xlarge
+      - m5zn.2xlarge
+      - m5zn.3xlarge
+      - m5zn.4xlarge
+      - r5.large
+      - r5.xlarge
+      - r5.2xlarge
+      - i3en.3xlarge
+      - m5zn.6xlarge
+      - r6i.4xlarge
+    Default: m5.2xlarge
+
+  CwNodeType:
+    Description: |
+      Select the Cw Node Type for deployment.
+      PLEASE NOTE - A replacement Hybrid node must reuse the same IP addresses as the Hybrid node it is replacing.
+    Type: String
+    AllowedValues:
+      - Hybrid
+      - Worker
+    Default: Worker
+
+  DataDiskSize:
+    Description: Cw data disk size.
+    Type: Number
+    MinValue: 450
+    Default: 450
+
+  K8sServiceNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s service network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.96.0.0'
+
+  K8sPodNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s pod network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.244.0.0'
+
+  CwMgmtVIP:
+    Type: String
+    Description: |
+      OPTIONAL - Specify the current Cw Management VIP address.
+      Leave unset when using an external NLB
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwDataVIP:
+    Type: String
+    Description: |
+      OPTIONAL - Specify the current Cw Data VIP address.
+      Leave unset when using an external NLB
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw1MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw1DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  UseExternalNLB:
+    Type: String
+    Description: Use an external NLB for this Cw cluster or a Crosswork VIP (single AZ only).
+    AllowedValues:
+      - "True"
+      - "False"
+    Default: "True"
+
+  OtherCwMgmtIP1:
+    Type: String
+    Description: OPTIONAL - Specify Mgmt IP address \#1 of existing Cw node. Only used when NOT deploying with external load balancer.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  OtherCwMgmtIP2:
+    Type: String
+    Description: OPTIONAL - Specify Mgmt IP address \#2 of existing Cw node. Only used when NOT deploying with external load balancer.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  OtherCwDataIP1:
+    Type: String
+    Description: OPTIONAL - Specify Data IP address \#1 of existing Cw node. Only used when NOT deploying with external load balancer.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  OtherCwDataIP2:
+    Type: String
+    Description: OPTIONAL - Specify Data IP address \#2 of existing Cw node. Only used when NOT deploying with external load balancer.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  ManagementVIPName:
+    Type: String
+    Description: Existing Management VIP Host Name
+    Default: ""
+  #  Default: cw-mgmtvipname
+  DataVIPName:
+    Type: String
+    Description: Existing Data VIP Host Name, if deploying with data interface.
+    Default: ""
+
+  Route53DomainName:
+    Description: Domain name used for Cw cluster
+    Type: String
+    Default: "cwcisco.com"
+
+  EC2ENIRole:
+    Type: String
+    Description: Existing role name for the Cw cluster. Must permit EC2 access
+    Default: ""
+
+  SSHKeyName:
+    Description: OPTIONAL - EC2 Key Name to use for cw-admin access
+    Type: String
+    Default: ""
+
+  #Cisco specific section
+  CECid:
+    Description: Enter your Cisco CEC Id - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+
+  Purpose:
+    Description: Deployment Purpose - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+
+  Customer:
+    Description: Customer - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+
+  AllocationOwner:
+    Description: Specify the allocation owner group for the deployment - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+    AllowedValues:
+      - development
+      - marketing
+      - test
+      - automation
+
+  CNCProductGroup:
+    Description: Enter Cisco CNC Product Group - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+    AllowedValues:
+      - CW-Infra
+      - CDG
+      - NSO
+      - XR
+      - SIT
+      - BuildAutomation
+      - Application
+
+  SchedulingPolicy:
+    Description: Enter Scheduling Policy - CISCO INTERNAL USE ONLY, leave at default otherwise
+    Type: String
+    AllowedValues:
+      - eu-till-end-of-day-shut
+      - pst-till-end-of-day-shut
+      - ist-till-end-of-day-shut
+      - pst-office-hours
+      - ist-office-hours
+      - eu-office-hours
+      - no-schedule
+    Default: eu-till-end-of-day-shut
+
+Conditions:
+
+  IsNotWorker: !Not
+    - !Equals
+      - !Ref CwNodeType
+      - "Worker"
+
+  DeployDataInterface: !Not
+    - !Equals
+      - !Ref InterfaceDeploymentMode
+      - "1"
+
+  IsNLBExternal: !Equals
+    - !Ref UseExternalNLB
+    - "True"
+
+  IsNotNLBExternal: !Equals
+    - !Ref UseExternalNLB
+    - "False"
+
+  SetDataVIP: !Not
+    - !Equals
+      - !Ref CwDataVIP
+      - ""
+
+  SetCw1IP0: !Not
+    - !Equals
+      - !Ref Cw1MgmtIP
+      - ""
+
+  SetCw1IP1: !Not
+    - !Equals
+      - !Ref Cw1DataIP
+      - ""
+
+  IsWorkerAndNoExternal: !Not
+    - !And
+      - !Equals
+        - !Ref CwNodeType
+        - "Worker"
+      - !Condition IsNotNLBExternal
+
+  IsHybridAndNoExternal: !Not
+    - !And
+      - !Equals
+        - !Ref CwNodeType
+        - "Hybrid"
+      - !Condition IsNotNLBExternal
+
+  HasEC2Key: !Not
+    - !Equals
+      - !Ref SSHKeyName
+      - ""
+
+Resources:
+
+  CwInstance1MgmntInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM1-Mgmt-eth0"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses: !If
+        - SetCw1IP0
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw1MgmtIP
+        - !Ref 'AWS::NoValue'
+      SubnetId: !Ref CwMgmtSubnetId
+      Tags:
+        - Key: Name
+          Value: Cw-VM1-eth0
+    # Used to error out an invalid configuration
+
+
+  CwInstance1DataInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM1-Data-eth1"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses: !If
+        - SetCw1IP1
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw1DataIP
+        - !Ref 'AWS::NoValue'
+      SubnetId: !Ref CwDataSubnetId
+      Tags:
+        - Key: Name
+          Value: Cw-VM1-eth1
+    Condition: DeployDataInterface
+
+  CwEC2IamInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub ${AWS::StackName}-CwEC2IamInstanceProfile
+      Path: "/cw/"
+      Roles:
+        - !Ref EC2ENIRole
+
+  #
+  ##  SSHSecurityGroup:
+  #    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
+  #    Type: AWS::EC2::SecurityGroup
+  #    Properties:
+  #      VpcId: !Ref "VpcId"
+  #      GroupDescription: Enable access to CNC VMs
+  #      Tags:
+  #        - Key: Name
+  #          Value: "Cw-SG-1"
+  #      SecurityGroupIngress:
+  #        # Must allow 22 and all of the service port range 30160:31560
+  #        #       - CidrIp: !Ref CwMgmtSubnetId
+  #        #         FromPort: 22
+  #        #         IpProtocol: tcp
+  #        #         ToPort: 22
+  #        #       - CidrIp: !Ref CwMgmtSubnetId
+  #        #         FromPort: 30603
+  #        #         IpProtocol: tcp
+  #        #         ToPort: 30603
+  #        - CidrIp: 10.0.0.0/8
+  #          FromPort: -1
+  #          IpProtocol: -1
+  #          ToPort: -1
+
+  #EC2 Launch Template Creation
+  CommonCwLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName:  !Sub CommonCwLaunchTemplate-${AWS::StackName}
+      LaunchTemplateData:
+        InstanceType: !Ref 'InstanceType'
+        ImageId: !Ref 'CwAmiId'
+        IamInstanceProfile:
+          Name: !Ref CwEC2IamInstanceProfile
+        KeyName:
+          Fn::If:
+            - HasEC2Key
+            - !Ref SSHKeyName
+            - !Ref 'AWS::NoValue'
+        EbsOptimized: True
+        BlockDeviceMappings:
+          - Ebs:
+              VolumeSize: 50
+              VolumeType: standard
+              DeleteOnTermination: True
+              Encrypted: False
+              #Iops: 1000
+            DeviceName: /dev/sda1
+          - Ebs:
+              VolumeSize: 10
+              DeleteOnTermination: True
+              VolumeType: gp3
+            DeviceName: /dev/sdc
+          - Ebs:
+              VolumeSize: !Ref DataDiskSize
+              DeleteOnTermination: True
+              VolumeType: gp3
+              Iops: 6000
+            DeviceName: /dev/sdd
+          - Ebs:
+              VolumeSize: 10
+              VolumeType: gp3
+              DeleteOnTermination: True
+              #Iops: 6000
+            DeviceName: /dev/sdm
+          - Ebs:
+              VolumeSize: 156
+              DeleteOnTermination: True
+              VolumeType: gp3
+              Iops: 6000
+            DeviceName: /dev/sdf
+          - Ebs:
+              VolumeSize: 250
+              DeleteOnTermination: True
+              VolumeType: gp3
+            DeviceName: /dev/sdg
+        MetadataOptions:
+          HttpPutResponseHopLimit: 2
+        PrivateDnsNameOptions:
+          EnableResourceNameDnsARecord: True
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: cisco:allocation:business-group
+                Value: "SPNAA:CNC"
+              - Key: cisco:allocation:owner
+                #Which functional group is responsible for this workload
+                #Value one of:
+                #development
+                #marketing
+                #test
+                #automation
+                Value: !Sub ${AllocationOwner}
+              - Key: cisco:allocation:product-group
+                #Identify the CNC component group
+                #Value one of:
+                #CW-Infra
+                #CDG
+                #NSO
+                #XR
+                #SIT
+                #BuildAutomation
+                #App:<name of app>
+                Value: !Sub ${CNCProductGroup}
+              - Key: cisco:allocation:userid
+                #Cisco user id
+                Value: !Sub ${CECid}
+              - Key: cisco:allocation:product-release
+                #Identify product release version
+                Value: "5.0.0"
+              - Key: cisco:allocation:customer-id
+                #Identify customer name or PID
+                Value: !Sub ${Customer}
+              - Key: cisco:allocation:ticket-id
+                #Relate to specific open ticket if any
+                Value: ""
+              - Key: cisco:operations:owner
+                #Which team is responsible for the creation and maintenance of the resource
+                #cw-build
+                #other
+                Value: ""
+              - Key: cisco:operations:schedule-ec2
+                #pst-office-hours
+                #ist-office-hours
+                #eu-office-hours
+                #work-week-restart
+                #pst-till-end-of-day-terminate
+                #pst-till-end-of-day-shut
+                #eu-till-end-of-day-shut
+                #till-end-of-week-terminate
+                #till-end-of-week-shut
+                #no-schedule
+                Value: !Sub ${SchedulingPolicy}
+              - Key: cisco:operations:purpose
+                #Value one of:
+                #infra
+                #build
+                #development
+                #test
+                Value: !Sub ${Purpose}
+              - Key: cisco:operations:cnc-cluster-id
+                #Tag to indicate the relation of a set of resources as being part of the same CNC cluster
+                Value: ""
+              - Key: cisco:operations:termination-protection
+                #Designates whether the VM is not meant to be terminated, even after being shut down
+                #True/False
+                Value: ""
+              - Key: cisco:security:posture
+                #Classify the resources security posture in terms of access
+                #private
+                #internet
+                Value: ""
+              - Key: cisco:data:classification
+                #Classify the data container/represented by the resource
+                #public, private, confidential, restricted
+                Value: ""
+
+  CwInstance1:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CommonCwLaunchTemplate
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonCwLaunchTemplate
+      NetworkInterfaces:  !If
+        - DeployDataInterface
+        - - NetworkInterfaceId: !Ref CwInstance1MgmntInterface
+            DeviceIndex: "0"
+          - NetworkInterfaceId: !Ref CwInstance1DataInterface
+            DeviceIndex: "1"
+        - - NetworkInterfaceId: !Ref CwInstance1MgmntInterface
+            DeviceIndex: "0"
+      Tags:
+        - Key: Name
+          Value: !Sub Cw-EC2-${CwNodeType}-VM1
+      UserData:  !Base64
+        Fn::Join:
+          - ''
+          - - !Sub |
+              <?xml version="1.0" encoding="UTF-8"?>
+              <Environment
+                <PlatformSection>
+                  <Kind>${DeploymentPlatform}</Kind>
+                </PlatformSection>
+                <PropertySection>
+                  <Property oe:key="CWPassword" oe:value="${CwSSHPassword}"/>
+                  <Property oe:key="CWUsername" oe:value="cw-admin"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="AwsIamRole" oe:value="'
+                  - !Ref EC2ENIRole
+                  - '"/>'
+                  - "\n"
+            - !Sub |
+              <Property oe:key="IsSeed" oe:value="False"/>
+              <Property oe:key="VMType" oe:value="${CwNodeType}"/>
+              <Property oe:key="DisableSSL" oe:value="False"/>
+              <Property oe:key="ManagementIPv4Address" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress}"/>
+              <Property oe:key="ManagementIPv4Gateway" oe:value="${CwMgmtSubnetGateway}"/>
+              <Property oe:key="ManagementIPv4Netmask" oe:value="${CwMgmtSubnetNetmask}"/>
+              <Property oe:key="ManagementIPv6Address" oe:value="::0"/>
+              <Property oe:key="ManagementIPv6Gateway" oe:value="::1"/>
+              <Property oe:key="ManagementIPv6Netmask" oe:value="64"/>
+            - !If
+              - IsHybridAndNoExternal
+              - Fn::Sub: |
+                  <Property oe:key="ManagerPeerIPs" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress} ${OtherCwMgmtIP1} ${OtherCwMgmtIP2}"/>
+              - |
+                <Property oe:key="ManagerPeerIPs" oe:value=""/>
+            - !If
+              - IsNLBExternal
+              - |
+                <Property oe:key="ManagementVIP" oe:value="127.0.0.1"/>
+              - Fn::Sub: |
+                  <Property oe:key="ManagementVIP" oe:value="${CwMgmtVIP}"/>
+            - !If
+              - DeployDataInterface
+              # Join statement to construct the Data Interface configs
+              - Fn::Join:
+                  - "\n"
+                  - - Fn::Sub: |
+                        <Property oe:key="DataIPv4Address" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress}"/>
+                        <Property oe:key="DataIPv4Netmask" oe:value="${CwDataSubnetNetmask}"/>
+                        <Property oe:key="DataIPv4Gateway" oe:value="${CwDataSubnetGateway}"/>
+              # Default settings when no data interface is present
+              - |
+                  <Property oe:key="DataIPv4Address" oe:value="0.0.0.0"/>
+                  <Property oe:key="DataIPv4Netmask" oe:value="255.255.255.0"/>
+                  <Property oe:key="DataIPv4Gateway" oe:value="0.0.0.0"/>
+            - !If
+              - DeployDataInterface
+              - !If
+                - IsNLBExternal
+                - |
+                    <Property oe:key="DataPeerIPs" oe:value=""/>
+                    <Property oe:key="DataVIP" oe:value="127.0.0.1"/>
+                - !Sub |
+                  <Property oe:key="DataPeerIPs" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress} ${OtherCwDataIP1} ${OtherCwDataIP2}"/>
+                  <Property oe:key="DataVIP" oe:value="${CwDataVIP}"/>
+              - |
+                  <Property oe:key="DataVIP" oe:value="0.0.0.0"/>
+                  <Property oe:key="DataPeerIPs" oe:value=""/>
+            - !Sub |
+              <Property oe:key="NTP" oe:value="169.254.169.123"/>
+              <Property oe:key="DNSv4" oe:value="169.254.169.253"/>
+              <Property oe:key="DNSv6" oe:value="::0"/>
+              <Property oe:key="Domain" oe:value="${Route53DomainName}"/>
+              <Property oe:key="InitMasterCount" oe:value="3"/>
+              <Property oe:key="InitNodeCount" oe:value="3"/>
+              <Property oe:key="VMLocation" oe:value="AWS"/>
+              <Property oe:key="ManagementVIPName" oe:value="${ManagementVIPName}"/>
+              <Property oe:key="DataVIPName" oe:value="${DataVIPName}"/>
+              <Property oe:key="DataIPv6Address" oe:value="::0"/>
+              <Property oe:key="DataIPv6Gateway" oe:value="::1"/>
+              <Property oe:key="DataIPv6Netmask" oe:value="64"/>
+              <Property oe:key="Deployment" oe:value="cw_ipv4"/>
+              <Property oe:key="Disclaimer" oe:value="Cisco Crosswork"/>
+              <Property oe:key="K8Orch" oe:value=""/>
+              <Property oe:key="CwInstaller" oe:value="False"/>
+              <Property oe:key="corefs" oe:value="20"/>
+              <Property oe:key="ddatafs" oe:value="${DataDiskSize}"/>
+              <Property oe:key="logfs" oe:value="10"/>
+              <Property oe:key="ramdisk" oe:value="0"/>
+              <Property oe:key="ssd" oe:value="50"/>
+              <Property oe:key="K8sServiceNetworkV4" oe:value="${K8sServiceNetwork}"/>
+              <Property oe:key="K8sPodNetworkV4" oe:value="${K8sPodNetwork}"/>
+              </PropertySection>
+              </Environment>
+
+
+Outputs:
+  CrossworkClusterStack:
+    Description: The Name of the Cw node stack
+    Value: !Sub ${AWS::StackName}
+  CrossworkManagementIP1:
+    Value: !Sub ${CwInstance1MgmntInterface.PrimaryPrivateIpAddress}
+  CrossworkDataIP1:
+    Value: !Sub ${CwInstance1DataInterface.PrimaryPrivateIpAddress}
+    Condition: DeployDataInterface
+

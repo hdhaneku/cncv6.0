@@ -1,0 +1,941 @@
+# Author - Wojciech Dec (wdec@cisco.com)
+Description: "Sample CF Template for deploying Cisco Crosswork cluster VMs, with 3 hybrid VMs, on EC2"
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "Cw Network Configuration"
+        Parameters:
+          - VpcId
+          - SecGroup
+          - CwSSHPassword
+          - CwAmiId
+          - CwMgmtSubnetId
+          - CwMgmtSubnetNetmask
+          - CwMgmtSubnetGateway
+          - CwMgmtVIP
+          - InterfaceDeploymentMode
+          - CwDataSubnetId
+          - CwDataSubnetNetmask
+          - CwDataSubnetGateway
+          - CwDataVIP
+      - Label:
+          default: "Cw VM customization"
+        Parameters:
+          - InstanceType
+          - DataDiskSize
+          - K8sServiceNetwork
+          - K8sPodNetwork
+      - Label:
+          default: "OPTIONAL - VM IP addressing"
+        Parameters:
+          - Cw1MgmtIP
+          - Cw1DataIP
+          - Cw2MgmtIP
+          - Cw2DataIP
+          - Cw3MgmtIP
+          - Cw3DataIP
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+
+  VPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form `x.x.x.x/16-28`.
+    Default: 10.249.0.0/16
+    Description: CIDR block for the SD-WAN VPC.
+    Type: String
+
+  CwMgmtSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the management subnet for the Crosswork VMs
+
+  CwMgmtSubnetNetmask:
+    Type: String
+    Description: Enter the management subnet netmask in dotted decimal form, eg 255.255.255.0
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwMgmtSubnetGateway:
+    Type: String
+    Description: Enter the management default gateway on the selected management subnet. This is typically the first address on the subnet.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwMgmtVIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet to be used as the VIP. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwDataSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the data subnet for the Crosswork VMs. In single interface deployments select the same subnet as for the management interface.
+
+  InterfaceDeploymentMode:
+    Type: String
+    Description: Select 1 (Management only) or 2 (Management + Data) interface deployment mode.
+    AllowedValues:
+      - 1
+      - 2
+      - 3
+
+  CwDataSubnetNetmask:
+    Type: String
+    Description: Enter the data subnet netmask in dotted decimal form, eg 255.255.255.0. Ignored when deploying in single interface mode.
+    Default: "255.255.255.0"
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+
+  CwDataSubnetGateway:
+    Type: String
+    Description: Enter the management default gateway on the selectec data subnet. This is typically the first address on the subnet. Ignored when deploying in single interface mode.
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '0.0.0.0'
+
+  CwDataVIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet to be used as the VIP. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Provide Crosswork AMI ID.
+
+#  MgmntPublicIP:
+#    Type: String
+#    Description: Enter your public IP. Will be use to restrict CNC SSH and UI access to this IP only
+#    Default: 0.0.0.0/0
+
+  CwSSHPassword:
+    Type: String
+    AllowedPattern: >-
+      (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: >-
+      Enter CNC SSH Password. NOTE; Use of external secret store is recommended.
+      Password for the domain admin user. Must be at least 8 characters
+      and contain letters, numbers, and symbols.
+    NoEcho: True
+
+
+  InstanceType:
+    Description: Enter EC2 instance type for the node instances.Default is m5.4xlarge.
+    Type: String
+    AllowedValues:
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.2xlarge
+      - m5.12xlarge
+      - m5d.4xlarge
+      - m5d.8xlarge
+      - m5d.2xlarge
+      - m5d.12xlarge
+      - m5n.4xlarge
+      - m5n.8xlarge
+      - m5n.2xlarge
+      - m5n.12xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+      - r5.2xlarge
+      - r5.12xlarge
+      - c5.4xlarge
+      - c5.2xlarge
+      - c5.12xlarge
+      - m5zn.2xlarge
+      - m5zn.3xlarge
+    Default: m5.4xlarge
+
+  DataDiskSize:
+    Description: Cw data disk size.
+    Type: Number
+    MinValue: 450
+    Default: 450
+
+  K8sServiceNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s service network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.96.0.0'
+
+  K8sPodNetwork:
+    Type: String
+    Description: "OPTIONAL - Enter the network address for the k8s pod network. The CIDR range is fixed to '/16'."
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+    Default: '10.244.0.0'
+
+  Cw1MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw1DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw2MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw2DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw3MgmtIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the management subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  Cw3DataIP:
+    Type: String
+    Description: OPTIONAL - Specify a free address on the data subnet. If not specified an address will be assigned automatically.
+    AllowedPattern: ((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))|^$
+    Default: ""
+
+  CwClusterPlacementStrategy:
+    Type: String
+    Description: Specify the EC2 instance placement strategy. Default 'cluster' ensures maximum throughput.
+    Default: cluster
+    AllowedValues:
+      - cluster
+      - partition
+      - spread
+
+  SecGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a
+      hyphen (-).
+    Default: aws-quickstart
+    Description:
+      Name of the S3 bucket for your copy of the Quick Start assets.
+      Keep the default name unless you are customizing the template.
+      Changing the name updates code references to point to a new Quick
+      Start location. This name can include numbers, lowercase letters,
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-).
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is
+    hosted. Keep the default Region unless you are customizing the template.
+    Changing this Region updates code references to point to a new Quick Start location.
+    When using your own bucket, specify the Region.
+    See https://aws-quickstart.github.io/option1.html.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
+    Default: quickstart-cisco-crossworks/
+    Description:
+      S3 key prefix used to simulate a directory for your copy of the
+      Quick Start assets. Keep the default prefix unless you're customizing
+      the template. Changing this prefix updates code references to point to
+      a new Quick Start location. This prefix can include numbers, lowercase
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
+
+
+
+
+
+Conditions:
+  DeployDataInterface: !Not
+    - !Equals
+      - !Ref InterfaceDeploymentMode
+      - "1"
+
+  SetMgmtVIP: !Not
+    - !Equals
+      - !Ref CwMgmtVIP
+      - ""
+
+  SetDataVIP: !Not
+    - !Equals
+      - !Ref CwDataVIP
+      - ""
+
+  SetCw1IP0: !Not
+    - !Equals
+      - !Ref Cw1MgmtIP
+      - ""
+
+  SetCw1IP1: !Not
+    - !Equals
+      - !Ref Cw1DataIP
+      - ""
+
+  SetCw2IP0: !Not
+    - !Equals
+      - !Ref Cw2MgmtIP
+      - ""
+
+  SetCw2IP1: !Not
+    - !Equals
+      - !Ref Cw2DataIP
+      - ""
+
+  SetCw3IP0: !Not
+    - !Equals
+      - !Ref Cw3MgmtIP
+      - ""
+
+  SetCw3IP1: !Not
+    - !Equals
+      - !Ref Cw3DataIP
+      - ""
+
+
+Resources:
+
+
+
+  EC2ENIRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: eni-modification
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:AssignPrivateIpAddresses
+                  - ec2:UnassignPrivateIpAddresses
+                Resource: "*"
+
+  CwPlacementGroup:
+    Type: AWS::EC2::PlacementGroup
+    Properties:
+      Strategy: !Sub ${CwClusterPlacementStrategy}
+
+  CwEC2IamInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub ${AWS::StackName}-CwEC2IamInstanceProfile
+      Path: "/cw/"
+      Roles:
+        - !Ref EC2ENIRole
+
+  # CwEIP:
+  #   Type: AWS::EC2::EIP
+  #   Properties:
+  #     Domain: vpc
+
+  # CwEIPAssociation:
+  #   Type: AWS::EC2::EIPAssociation
+  #   Properties:
+  #     AllocationId: !GetAtt CwEIP.AllocationId
+  #     NetworkInterfaceId: !Ref CwInstance1MgmntInterface
+
+
+
+  CwInstance1MgmntInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM1-Mgmt-eth0"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw1IP0
+        - !If
+          - SetMgmtVIP
+          - - Primary: false
+              PrivateIpAddress: !Ref CwMgmtVIP
+            - Primary: true
+              PrivateIpAddress: !Ref Cw1MgmtIP
+          - - Primary: true
+              PrivateIpAddress: !Ref Cw1MgmtIP
+        - !If
+          - SetMgmtVIP
+          - - Primary: false
+              PrivateIpAddress: !Ref CwMgmtVIP
+          - !Ref 'AWS::NoValue'
+      SecondaryPrivateIpAddressCount:
+        !If
+        - SetMgmtVIP
+        - !Ref 'AWS::NoValue'
+        - !If
+          - SetCw1IP0
+          - !Ref 'AWS::NoValue'
+          - 1
+      SubnetId: !Ref CwMgmtSubnetId
+      Tags:
+        - Key: Name
+          Value: Cw-VM1-eth0
+
+  CwInstance1DataInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM1-Data-eth1"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw1IP1
+        - !If
+          - SetDataVIP
+          - - Primary: false
+              PrivateIpAddress: !Ref CwDataVIP
+            - Primary: true
+              PrivateIpAddress: !Ref Cw1DataIP
+          - - Primary: true
+              PrivateIpAddress: !Ref Cw1DataIP
+        - !If
+          - SetDataVIP
+          - - Primary: false
+              PrivateIpAddress: !Ref CwDataVIP
+          - !Ref 'AWS::NoValue'
+      SecondaryPrivateIpAddressCount:
+        !If
+        - SetDataVIP
+        - !Ref 'AWS::NoValue'
+        - !If
+          - SetCw1IP1
+          - !Ref 'AWS::NoValue'
+          - 1
+      SubnetId: !Ref CwDataSubnetId
+      Tags:
+        - Key: Name
+          Value: Cw-VM1-eth1
+    Condition: DeployDataInterface
+
+  CwInstance2MgmntInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM2-Mgmt-eth0"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw2IP0
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw2MgmtIP
+        - !Ref 'AWS::NoValue'
+      SubnetId: !Ref CwMgmtSubnetId
+      Tags:
+        - Key: Name
+          Value: Cw-VM2-eth0
+
+  CwInstance2DataInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM2-Data-eth1"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw2IP1
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw2DataIP
+        - !Ref 'AWS::NoValue'
+      SubnetId:  !Ref CwDataSubnetId
+      Tags:
+        - Key: Name
+          Value: VM2-eth1
+    Condition: DeployDataInterface
+
+  CwInstance3MgmntInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM3-Mgmt-eth0"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw3IP0
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw3MgmtIP
+        - !Ref 'AWS::NoValue'
+      SubnetId: !Ref CwMgmtSubnetId
+      Tags:
+        - Key: Name
+          Value: VM3-eth0
+
+  CwInstance3DataInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      Description: "VM3-Data-eth1"
+      GroupSet:
+        #- !Ref 'SSHSecurityGroup'
+        - !Ref SecGroup
+      PrivateIpAddresses:
+        !If
+        - SetCw3IP1
+        - - Primary: true
+            PrivateIpAddress: !Ref Cw3DataIP
+        - !Ref 'AWS::NoValue'
+      SubnetId: !Ref CwDataSubnetId
+      Tags:
+        - Key: Name
+          Value: VM3-eth1
+    Condition: DeployDataInterface
+
+#  SSHSecurityGroup:
+#    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      VpcId: !Ref "VpcId"
+#      GroupDescription: Enable access to CNC VMs
+#      Tags:
+#        - Key: Name
+#          Value: "Cw-SG-1"
+#      SecurityGroupIngress:
+#        # Must allow 22 and all of the service port range 30160:31560
+#        #       - CidrIp: !Ref CwMgmtSubnetId
+#        #         FromPort: 22
+#        #         IpProtocol: tcp
+#        #         ToPort: 22
+#        #       - CidrIp: !Ref CwMgmtSubnetId
+#        #         FromPort: 30603
+#        #         IpProtocol: tcp
+#        #         ToPort: 30603
+#        - CidrIp: 10.0.0.0/8
+#          FromPort: -1
+#          IpProtocol: -1
+#          ToPort: -1
+
+
+  #EC2 Launch Template Creation
+  CommonCwLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName:  !Sub CommonCwLaunchTemplate-${AWS::StackName}
+      LaunchTemplateData:
+        InstanceType: !Ref 'InstanceType'
+        ImageId: !Ref 'CwAmiId'
+        IamInstanceProfile:
+          Name: !Ref CwEC2IamInstanceProfile
+        EbsOptimized: True
+#        InstanceMarketOptions:
+#          MarketType: spot
+        Placement:
+          GroupName: !Ref CwPlacementGroup
+        BlockDeviceMappings:
+          - Ebs:
+              VolumeSize: 50
+              VolumeType: standard
+              DeleteOnTermination: True
+              Encrypted: False
+              #Iops: 1000
+            DeviceName: /dev/sda1
+          - Ebs:
+              VolumeSize: 10
+              DeleteOnTermination: True
+              VolumeType: gp3
+            DeviceName: /dev/sdc
+          - Ebs:
+              VolumeSize: !Ref DataDiskSize
+              DeleteOnTermination: True
+              VolumeType: gp3
+              Iops: 6000
+            DeviceName: /dev/sdd
+          - Ebs:
+              VolumeSize: 10
+              VolumeType: gp3
+              DeleteOnTermination: True
+              #Iops: 6000
+            DeviceName: /dev/sdm
+          - Ebs:
+              VolumeSize: 156
+              DeleteOnTermination: True
+              VolumeType: gp3
+              Iops: 6000
+            DeviceName: /dev/sdf
+          - Ebs:
+              VolumeSize: 250
+              DeleteOnTermination: True
+              VolumeType: gp3
+            DeviceName: /dev/sdg
+        MetadataOptions:
+          HttpPutResponseHopLimit: 2
+        PrivateDnsNameOptions:
+          EnableResourceNameDnsARecord: True
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: cisco-bu-group
+                Value: "spnaa"
+              - Key: cisco-bu-owner
+                Value: ""
+              - Key: cisco-bu-project-name
+                Value: "Crosswork"
+              - Key: cisco-bu-release
+                Value: "440"
+              - Key: cisco-bu-role
+                Value: "test"
+              - Key: cisco-ops-runtime-optin
+                Value: "in"
+              - Key: cisco-ops-runtime-policy
+                Value: "mon-fri"
+              - Key: cisco-ops-timezone
+                Value: "PST"
+              - Key: cisco-sec-internetfacing
+                Value: "false"
+
+  CwInstance1:
+   # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonCwLaunchTemplate
+      NetworkInterfaces:  !If
+        - DeployDataInterface
+        - - NetworkInterfaceId: !Ref CwInstance1MgmntInterface
+            DeviceIndex: "0"
+          - NetworkInterfaceId: !Ref CwInstance1DataInterface
+            DeviceIndex: "1"
+        - - NetworkInterfaceId: !Ref CwInstance1MgmntInterface
+            DeviceIndex: "0"
+      Tags:
+        - Key: Name
+          Value: Cw-EC2-VM1
+      UserData:  !Base64
+        Fn::Join:
+          - ''
+          - - !Sub |
+              <?xml version="1.0" encoding="UTF-8"?>
+              <Environment
+                <PlatformSection>
+                  <Kind>EC2</Kind>
+                </PlatformSection>
+                <PropertySection>
+                  <Property oe:key="CWPassword" oe:value="${CwSSHPassword}"/>
+                  <Property oe:key="CWUsername" oe:value="cw-admin"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="AwsIamRole" oe:value="'
+                  - !Ref EC2ENIRole
+                  - '"/>'
+                  - "\n"
+            - !Sub |
+                  <Property oe:key="IsSeed" oe:value="True"/>
+                  <Property oe:key="VMType" oe:value="Hybrid"/>
+                  <Property oe:key="ManagementIPv4Address" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress}"/>
+                  <Property oe:key="ManagementIPv4Gateway" oe:value="${CwMgmtSubnetGateway}"/>
+                  <Property oe:key="ManagementIPv4Netmask" oe:value="${CwMgmtSubnetNetmask}"/>
+                  <Property oe:key="ManagementIPv6Address" oe:value="::0"/>
+                  <Property oe:key="ManagementIPv6Gateway" oe:value="::1"/>
+                  <Property oe:key="ManagementIPv6Netmask" oe:value="64"/>
+                  <Property oe:key="ManagerPeerIPs" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance2MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance3MgmntInterface.PrimaryPrivateIpAddress}"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="ManagementVIP" oe:value="'
+                  - Fn::Select: [0, Fn::GetAtt: [CwInstance1MgmntInterface, SecondaryPrivateIpAddresses]]
+                  - '"/>'
+                  - "\n"
+            - !If
+              - DeployDataInterface
+              # Join statement to construct the Data Interface configs
+              - Fn::Join:
+                - "\n"
+                - - Fn::Sub: |
+                      <Property oe:key="DataIPv4Address" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress}"/>
+                      <Property oe:key="DataIPv4Netmask" oe:value="${CwDataSubnetNetmask}"/>
+                      <Property oe:key="DataIPv4Gateway" oe:value="${CwDataSubnetGateway}"/>
+                      <Property oe:key="DataPeerIPs" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress} ${CwInstance2DataInterface.PrimaryPrivateIpAddress} ${CwInstance3DataInterface.PrimaryPrivateIpAddress}"/>
+                  - Fn::Join:
+                      - ""
+                      - - '<Property oe:key="DataVIP" oe\:value="'
+                        - Fn::Select: [0, Fn::GetAtt: [CwInstance1DataInterface, SecondaryPrivateIpAddresses]]
+                        - '"/>'
+                        - "\n"
+              # Default settings when no data interface is present
+              - |
+                  <Property oe:key="DataIPv4Address" oe:value="0.0.0.0"/>
+                  <Property oe:key="DataIPv4Netmask" oe:value="255.255.255.0"/>
+                  <Property oe:key="DataIPv4Gateway" oe:value="0.0.0.0"/>
+                  <Property oe:key="DataVIP" oe:value="0.0.0.0"/>
+                  <Property oe:key="DataPeerIPs" oe:value=""/>
+            - !Sub |
+                <Property oe:key="NTP" oe:value="169.254.169.123"/>
+                <Property oe:key="DNSv4" oe:value="169.254.169.253"/>
+                <Property oe:key="DNSv6" oe:value="::0"/>
+                <Property oe:key="Domain" oe:value=""/>
+                <Property oe:key="InitMasterCount" oe:value="3"/>
+                <Property oe:key="InitNodeCount" oe:value="3"/>
+                <Property oe:key="VMLocation" oe:value="AWS"/>
+                <Property oe:key="DataIPv6Address" oe:value="::0"/>
+                <Property oe:key="DataIPv6Gateway" oe:value="::1"/>
+                <Property oe:key="DataIPv6Netmask" oe:value="64"/>
+                <Property oe:key="Deployment" oe:value="cw_ipv4"/>
+                <Property oe:key="Disclaimer" oe:value="Cisco Crosswork"/>
+                <Property oe:key="K8Orch" oe:value=""/>
+                <Property oe:key="CwInstaller" oe:value="False"/>
+                <Property oe:key="corefs" oe:value="20"/>
+                <Property oe:key="ddatafs" oe:value="${DataDiskSize}"/>
+                <Property oe:key="logfs" oe:value="10"/>
+                <Property oe:key="ramdisk" oe:value="0"/>
+                <Property oe:key="ssd" oe:value="50"/>
+                <Property oe:key="K8sServiceNetworkV4" oe:value="${K8sServiceNetwork}"/>
+                <Property oe:key="K8sPodNetworkV4" oe:value="${K8sPodNetwork}"/>
+                </PropertySection>
+                </Environment>
+
+  CwInstance2:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonCwLaunchTemplate
+      NetworkInterfaces:  !If
+        - DeployDataInterface
+        - - NetworkInterfaceId: !Ref CwInstance2MgmntInterface
+            DeviceIndex: "0"
+          - NetworkInterfaceId: !Ref CwInstance2DataInterface
+            DeviceIndex: "1"
+        - - NetworkInterfaceId: !Ref CwInstance2MgmntInterface
+            DeviceIndex: "0"
+      Tags:
+        - Key: Name
+          Value: Cw-EC2-VM2
+      UserData:  !Base64
+        'Fn::Join':
+          - ''
+          - - !Sub |
+              <?xml version="1.0" encoding="UTF-8"?>
+              <Environment
+                <PlatformSection>
+                  <Kind>EC2</Kind>
+                </PlatformSection>
+                <PropertySection>
+                  <Property oe:key="CWPassword" oe:value="${CwSSHPassword}"/>
+                  <Property oe:key="CWUsername" oe:value="cw-admin"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="AwsIamRole" oe:value="'
+                  - !Ref EC2ENIRole
+                  - '"/>'
+                  - "\n"
+            - !Sub |
+                  <Property oe:key="IsSeed" oe:value="False"/>
+                  <Property oe:key="VMType" oe:value="Hybrid"/>
+                  <Property oe:key="ManagementIPv4Address" oe:value="${CwInstance2MgmntInterface.PrimaryPrivateIpAddress}"/>
+                  <Property oe:key="ManagementIPv4Gateway" oe:value="${CwMgmtSubnetGateway}"/>
+                  <Property oe:key="ManagementIPv4Netmask" oe:value="${CwMgmtSubnetNetmask}"/>
+                  <Property oe:key="ManagementIPv6Address" oe:value="::0"/>
+                  <Property oe:key="ManagementIPv6Gateway" oe:value="::1"/>
+                  <Property oe:key="ManagementIPv6Netmask" oe:value="64"/>
+                  <Property oe:key="ManagerPeerIPs" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance2MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance3MgmntInterface.PrimaryPrivateIpAddress}"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="ManagementVIP" oe:value="'
+                  - Fn::Select: [0, Fn::GetAtt: [CwInstance1MgmntInterface, SecondaryPrivateIpAddresses]]
+                  - '"/>'
+                  - "\n"
+            - !If
+              - DeployDataInterface
+              # Join statement to construct the Data Interface configs
+              - Fn::Join:
+                  - "\n"
+                  - - Fn::Sub: |
+                        <Property oe:key="DataIPv4Address" oe:value="${CwInstance2DataInterface.PrimaryPrivateIpAddress}"/>
+                        <Property oe:key="DataIPv4Netmask" oe:value="${CwDataSubnetNetmask}"/>
+                        <Property oe:key="DataIPv4Gateway" oe:value="${CwDataSubnetGateway}"/>
+                        <Property oe:key="DataPeerIPs" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress} ${CwInstance2DataInterface.PrimaryPrivateIpAddress} ${CwInstance3DataInterface.PrimaryPrivateIpAddress}"/>
+                    - Fn::Join:
+                        - ""
+                        - - '<Property oe:key="DataVIP" oe\:value="'
+                          - Fn::Select: [0, Fn::GetAtt: [CwInstance1DataInterface, SecondaryPrivateIpAddresses]]
+                          - '"/>'
+                          - "\n"
+              # Default settings when no data interface is present
+              - |
+                <Property oe:key="DataIPv4Address" oe:value="0.0.0.0"/>
+                <Property oe:key="DataIPv4Netmask" oe:value="255.255.255.0"/>
+                <Property oe:key="DataIPv4Gateway" oe:value="0.0.0.0"/>
+                <Property oe:key="DataVIP" oe:value="0.0.0.0"/>
+                <Property oe:key="DataPeerIPs" oe:value=""/>
+            - !Sub |
+              <Property oe:key="NTP" oe:value="169.254.169.123"/>
+              <Property oe:key="DNSv4" oe:value="169.254.169.253"/>
+              <Property oe:key="DNSv6" oe:value="::0"/>
+              <Property oe:key="Domain" oe:value=""/>
+              <Property oe:key="InitMasterCount" oe:value="3"/>
+              <Property oe:key="InitNodeCount" oe:value="3"/>
+              <Property oe:key="VMLocation" oe:value="AWS"/>
+              <Property oe:key="DataIPv6Address" oe:value="::0"/>
+              <Property oe:key="DataIPv6Gateway" oe:value="::1"/>
+              <Property oe:key="DataIPv6Netmask" oe:value="64"/>
+              <Property oe:key="Deployment" oe:value="cw_ipv4"/>
+              <Property oe:key="Disclaimer" oe:value="Cisco Crosswork"/>
+              <Property oe:key="K8Orch" oe:value=""/>
+              <Property oe:key="CwInstaller" oe:value="False"/>
+              <Property oe:key="corefs" oe:value="20"/>
+              <Property oe:key="ddatafs" oe:value="${DataDiskSize}"/>
+              <Property oe:key="logfs" oe:value="10"/>
+              <Property oe:key="ramdisk" oe:value="0"/>
+              <Property oe:key="ssd" oe:value="50"/>
+              <Property oe:key="K8sServiceNetworkV4" oe:value="${K8sServiceNetwork}"/>
+              <Property oe:key="K8sPodNetworkV4" oe:value="${K8sPodNetwork}"/>
+              </PropertySection>
+              </Environment>
+
+  CwInstance3:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        Version: 1
+        LaunchTemplateId: !Ref CommonCwLaunchTemplate
+      NetworkInterfaces:  !If
+        - DeployDataInterface
+        - - NetworkInterfaceId: !Ref CwInstance3MgmntInterface
+            DeviceIndex: "0"
+          - NetworkInterfaceId: !Ref CwInstance3DataInterface
+            DeviceIndex: "1"
+        - - NetworkInterfaceId: !Ref CwInstance3MgmntInterface
+            DeviceIndex: "0"
+      Tags:
+        - Key: Name
+          Value: Cw-EC2-VM3
+      UserData:  !Base64
+        'Fn::Join':
+          - ''
+          - - !Sub |
+              <?xml version="1.0" encoding="UTF-8"?>
+              <Environment
+                <PlatformSection>
+                  <Kind>EC2</Kind>
+                </PlatformSection>
+                <PropertySection>
+                  <Property oe:key="CWPassword" oe:value="${CwSSHPassword}"/>
+                  <Property oe:key="CWUsername" oe:value="cw-admin"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="AwsIamRole" oe:value="'
+                  - !Ref EC2ENIRole
+                  - '"/>'
+                  - "\n"
+            - !Sub |
+                  <Property oe:key="IsSeed" oe:value="False"/>
+                  <Property oe:key="VMType" oe:value="Hybrid"/>
+                  <Property oe:key="ManagementIPv4Address" oe:value="${CwInstance3MgmntInterface.PrimaryPrivateIpAddress}"/>
+                  <Property oe:key="ManagementIPv4Gateway" oe:value="${CwMgmtSubnetGateway}"/>
+                  <Property oe:key="ManagementIPv4Netmask" oe:value="${CwMgmtSubnetNetmask}"/>
+                  <Property oe:key="ManagementIPv6Address" oe:value="::0"/>
+                  <Property oe:key="ManagementIPv6Gateway" oe:value="::1"/>
+                  <Property oe:key="ManagementIPv6Netmask" oe:value="64"/>
+                  <Property oe:key="ManagerPeerIPs" oe:value="${CwInstance1MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance2MgmntInterface.PrimaryPrivateIpAddress} ${CwInstance3MgmntInterface.PrimaryPrivateIpAddress}"/>
+            - Fn::Join:
+                - ""
+                - - '<Property oe:key="ManagementVIP" oe:value="'
+                  - Fn::Select: [0, Fn::GetAtt: [CwInstance1MgmntInterface, SecondaryPrivateIpAddresses]]
+                  - '"/>'
+                  - "\n"
+            - !If
+              - DeployDataInterface
+              # Join statement to construct the Data Interface configs
+              - Fn::Join:
+                  - "\n"
+                  - - Fn::Sub: |
+                        <Property oe:key="DataIPv4Address" oe:value="${CwInstance3DataInterface.PrimaryPrivateIpAddress}"/>
+                        <Property oe:key="DataIPv4Netmask" oe:value="${CwDataSubnetNetmask}"/>
+                        <Property oe:key="DataIPv4Gateway" oe:value="${CwDataSubnetGateway}"/>
+                        <Property oe:key="DataPeerIPs" oe:value="${CwInstance1DataInterface.PrimaryPrivateIpAddress} ${CwInstance2DataInterface.PrimaryPrivateIpAddress} ${CwInstance3DataInterface.PrimaryPrivateIpAddress}"/>
+                    - Fn::Join:
+                        - ""
+                        - - '<Property oe:key="DataVIP" oe\:value="'
+                          - Fn::Select: [0, Fn::GetAtt: [CwInstance1DataInterface, SecondaryPrivateIpAddresses]]
+                          - '"/>'
+                          - "\n"
+              # Default settings when no data interface is present
+              - |
+                <Property oe:key="DataIPv4Address" oe:value="0.0.0.0"/>
+                <Property oe:key="DataIPv4Netmask" oe:value="255.255.255.0"/>
+                <Property oe:key="DataIPv4Gateway" oe:value="0.0.0.0"/>
+                <Property oe:key="DataVIP" oe:value="0.0.0.0"/>
+                <Property oe:key="DataPeerIPs" oe:value=""/>
+            - !Sub |
+              <Property oe:key="NTP" oe:value="169.254.169.123"/>
+              <Property oe:key="DNSv4" oe:value="169.254.169.253"/>
+              <Property oe:key="DNSv6" oe:value="::0"/>
+              <Property oe:key="Domain" oe:value=""/>
+              <Property oe:key="InitMasterCount" oe:value="3"/>
+              <Property oe:key="InitNodeCount" oe:value="3"/>
+              <Property oe:key="VMLocation" oe:value="AWS"/>
+              <Property oe:key="DataIPv6Address" oe:value="::0"/>
+              <Property oe:key="DataIPv6Gateway" oe:value="::1"/>
+              <Property oe:key="DataIPv6Netmask" oe:value="64"/>
+              <Property oe:key="Deployment" oe:value="cw_ipv4"/>
+              <Property oe:key="Disclaimer" oe:value="Cisco Crosswork"/>
+              <Property oe:key="K8Orch" oe:value=""/>
+              <Property oe:key="CwInstaller" oe:value="False"/>
+              <Property oe:key="corefs" oe:value="20"/>
+              <Property oe:key="ddatafs" oe:value="${DataDiskSize}"/>
+              <Property oe:key="logfs" oe:value="10"/>
+              <Property oe:key="ramdisk" oe:value="0"/>
+              <Property oe:key="ssd" oe:value="50"/>
+              <Property oe:key="K8sServiceNetworkV4" oe:value="${K8sServiceNetwork}"/>
+              <Property oe:key="K8sPodNetworkV4" oe:value="${K8sPodNetwork}"/>
+              </PropertySection>
+              </Environment>
+
+Outputs:
+  CrossworkClusterStack:
+    Description: The Name of the Cw cluster stack
+    Value: !Sub ${AWS::StackName}
+  CrossworkManagementVIP:
+    Value:
+      Fn::Select: [0, Fn::GetAtt: [CwInstance1MgmntInterface, SecondaryPrivateIpAddresses]]
+    Export:
+      Name: !Sub ${AWS::StackName}-Cw-MgmntVIP
+  CrossworkManagementIP1:
+    Value: !Sub ${CwInstance1MgmntInterface.PrimaryPrivateIpAddress}
+  CrossworkManagementIP2:
+    Value: !Sub ${CwInstance2MgmntInterface.PrimaryPrivateIpAddress}
+  CrossworkManagementIP3:
+    Value: !Sub ${CwInstance3MgmntInterface.PrimaryPrivateIpAddress}
+  CrossworkDataVIP:
+    Value:
+      Fn::Select: [0, Fn::GetAtt: [CwInstance1DataInterface, SecondaryPrivateIpAddresses]]
+    Export:
+      Name: !Sub ${AWS::StackName}-Cw-DataVIP
+    Condition: DeployDataInterface
+  CrossworkDataIP1:
+    Value: !Sub ${CwInstance1DataInterface.PrimaryPrivateIpAddress}
+    Condition: DeployDataInterface
+  CrossworkDataIP2:
+    Value: !Sub ${CwInstance2DataInterface.PrimaryPrivateIpAddress}
+    Condition: DeployDataInterface
+  CrossworkDataIP3:
+    Value: !Sub ${CwInstance3DataInterface.PrimaryPrivateIpAddress}
+    Condition: DeployDataInterface

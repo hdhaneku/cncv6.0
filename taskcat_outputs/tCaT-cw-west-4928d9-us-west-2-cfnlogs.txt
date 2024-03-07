@@ -1,0 +1,22 @@
+-----------------------------------------------------------------------------
+Region: us-west-2
+StackName: tCaT-cw-west-4928d9
+*****************************************************************************
+ResourceStatusReason:  
+Parameter validation failed: parameter value ami-01ab4e043ba3690a5 for parameter name
+NsoAmiId does not exist, parameter value ami-0111fc861b88a5677 for parameter name
+WindowsAMI does not exist, parameter value ami-0ec33c2ee35a9554e for parameter name
+SRPCEAmiId does not exist, parameter value cncv4.1 for parameter name KeyName does
+not exist
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2024-02-04 12:37:40.584000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-cw-west-4928d9  Parameter validation failed: parameter value ami-01ab4e043ba3690a5 for parameter name NsoAmiId does not exist, parameter value ami-0111fc861b88a5677 for parameter name WindowsAMI does not exist, parameter value ami-0ec33c2ee35a9554e for parameter name SRPCEAmiId does not exist, parameter value cncv4.1 for parameter name KeyName does not exist
+2024-02-04 12:37:36.480000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-cw-west-4928d9  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Sunday, 04. February 2024 04:38AM
+-----------------------------------------------------------------------------
+

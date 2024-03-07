@@ -1,0 +1,790 @@
+# Author Sriharsha Dhanekula(hdhaneku@cisco.com) and Josh leatham (jleatha@amazon.com)
+# 03-06-24 made changes on Josh email and updated NSO Profile name
+----
+#AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  This stack creates a State Machine that runs APIs for Crossworks
+
+Parameters:
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+
+  CwSSHPassword:
+    Type: String
+    AllowedPattern: >-
+      (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: >-
+      Enter CNC SSH Password. NOTE; Use of external secret store is recommended.
+      Password for the domain admin user. Must be at least 8 characters
+      and contain letters, numbers, and symbols.
+    NoEcho: True
+  SecGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+  CwMgmtSubnetId:
+    Type: String
+  CNCControllerIP:
+    Type: String
+  NSOIP:
+    Type: String
+  SRPCE1Name:
+    Type: String
+  SRPCE1MgmtIP:
+    Type: String
+  SRPCE2Name:
+    Type: String
+  SRPCE2MgmtIP:
+    Type: String
+  SRPCE3Name:
+    Type: String
+  SRPCE3MgmtIP:
+    Type: String
+  CrossworkEventBusName:
+    Type: String
+    Default: crossworks
+
+Resources:
+
+
+  RunAPIsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.lambda_handler    
+      Runtime: python3.9
+      Timeout: 30
+      VpcConfig:
+        SecurityGroupIds: 
+          - !Ref SecGroup
+        SubnetIds:
+          - !Ref CwMgmtSubnetId
+      Environment:
+        Variables:
+          cw_ip: !Ref CNCControllerIP
+          username: admin
+          password: !Ref CwSSHPassword
+          nso_ip: !Ref NSOIP
+          device1_name: !Ref SRPCE1Name
+          device1_ip: !Ref SRPCE1MgmtIP
+          device2_name: !Ref SRPCE2Name
+          device2_ip: !Ref SRPCE2MgmtIP
+          device3_name: !Ref SRPCE3Name
+          device3_ip: !Ref SRPCE3MgmtIP                    
+      InlineCode: |
+        '''
+        Add Credentials, Provider and Devices
+        '''
+
+        import os
+        import sys
+        import time
+        import json
+        from collections import OrderedDict
+        import urllib.request, urllib.parse
+        import ssl
+
+
+
+
+        # CNC IP
+        cw_ip = os.environ['cw_ip']
+        username = os.environ['username']
+        password = os.environ['password']
+
+        #NSO IP - used in provider
+        nso_ip = os.environ['nso_ip']
+
+        device1_ip = os.environ['device1_ip']
+        device1_name = os.environ['device1_name']
+        device2_ip = os.environ['device2_ip']
+        device2_name = os.environ['device2_name']
+        device3_ip = os.environ['device3_ip']
+        device3_name = os.environ['device3_name']
+
+
+
+
+        ACCEPTED_CODES = [200, 201, 204]
+        cw_url = "https://" + cw_ip + ":30603"
+
+
+
+
+        def token(username, password):
+            '''
+            Follow Crosswork API 2 step process to generate JWT via TGT
+            :param username: Crosswork Username
+            :param password: Password
+            :param cw_url: Base URL for Crosswork API requests
+            :return: JWT token for Crosswork API requests
+            '''
+            token_headers = {'Content-type': 'application/x-www-form-urlencoded', 'Accept': 'text/plain'}
+            token_uri = "/crosswork/sso/v1/tickets"
+
+            tgt_url = f"{cw_url}{token_uri}?username={username}&password={password}"
+            print(f"tgt_url={tgt_url}")
+            try:
+
+                context = ssl._create_unverified_context()
+                tgt_request = urllib.request.Request(tgt_url, headers=token_headers, method='POST')
+                print(tgt_request.method) 
+                tgt_response = urllib.request.urlopen(tgt_request, context=context)
+                tgt_content = tgt_response.read().decode()
+                print(f"TGT response = {tgt_content}")
+                
+                jwt_url = f"{cw_url}{token_uri}/{tgt_content}"
+                jwt_payload = f"service={cw_url}/app-dashboard"
+                jwt_data = jwt_payload.encode('utf-8')
+                jwt_request = urllib.request.Request(jwt_url, data=jwt_data, headers=token_headers)
+                jwt_response = urllib.request.urlopen(jwt_request, context=context)
+            except Exception as e:
+                print(e)
+            return jwt_response.read().decode()
+
+
+        def add_creds(jwt_token):
+            cred_url = cw_url + "/crosswork/inventory/v1/credentials"
+            headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + jwt_token
+            }
+            data = {
+                "data": [
+                    {
+                        "profile": "nso614",
+                        "user_pass": [
+                            {
+                                "user_name": "admin",
+                                "password": "admin",
+                                "type": "ROBOT_USERPASS_NETCONF"
+                            },
+                            {
+                                "user_name": "admin",
+                                "password": "admin",
+                                "type": "ROBOT_USERPASS_HTTP"
+                            },
+                            {
+                                "user_name": "admin",
+                                "password": "admin",
+                                "type": "ROBOT_USERPASS_HTTPS"
+                            }
+                        ]
+                    },
+                    {
+                        "profile": "demo",
+                        "v2_info": {
+                            "read_community": "cisco",
+                            "write_community": "cisco"
+                        },
+                        "user_pass": [
+                            {
+                                "user_name": "july",
+                                "password": "cisco123",
+                                "type": "ROBOT_USERPASS_SSH"
+                            },
+                            {
+                                "user_name": "july",
+                                "password": "cisco123",
+                                "type": "ROBOT_USERPASS_TELNET"
+                            },
+                            {
+                                "user_name": "july",
+                                "password": "cisco123",
+                                "type": "ROBOT_USERPASS_ADMIN"
+                            },
+                            {
+                                "user_name": "july",
+                                "password": "cisco123",
+                                "type": "ROBOT_USERPASS_NETCONF"
+                            }
+                        ]
+                    },
+                    {
+                        "profile": "ca_device_auth_nso",
+                        "user_pass": [
+                            {
+                                "user_name": "cisco",
+                                "password": "C1sco12345",
+                                "type": "ROBOT_USERPASS_HTTP"
+                            },
+                            {
+                                "user_name": "cisco",
+                                "password": "C1sco12345",
+                                "type": "ROBOT_USERPASS_HTTPS"
+                            }
+                        ]
+                    }
+                ],
+                "user": "admin"
+            }
+            try:
+                context = ssl._create_unverified_context()
+                data = json.dumps(data).encode('utf-8')
+                req = urllib.request.Request(url=cred_url, data=data, headers=headers, method='POST')
+                response = urllib.request.urlopen(req, context=context)
+                response_text = response.read().decode('utf-8')
+                print(response_text)
+                return response_text    
+            except Exception as e:
+                print(e)
+
+
+        def add_prov(jwt_token):
+            prov_url = cw_url + "/crosswork/inventory/v1/providers"
+            headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + jwt_token
+            }
+            data = {
+                "providers": [
+                    {
+                        "uuid": "",
+                        "name": "nso-57cnc",
+                        "profile": "nso1",
+                        "provider_device_key": "ROBOT_PROVDEVKEY_HOST_NAME",
+                        "connectivity_info": [
+                            {
+                                "type": "ROBOT_MSVC_TRANS_NETCONF",
+                                "ipaddrs": [
+                                    {
+                                        "inet_af": 0,
+                                        "inet_addr": nso_ip,
+                                        "mask": "24"
+                                    }
+                                ],
+                                "port": 2022,
+                                "timeout": "30"
+                            },
+                            {
+                                "type": "ROBOT_MSVC_TRANS_HTTP",
+                                "ipaddrs": [
+                                    {
+                                        "inet_af": 0,
+                                        "inet_addr": nso_ip,
+                                        "mask": "24"
+                                    }
+                                ],
+                                "port": 8080,
+                                "timeout": "30"
+                            },
+                            {
+                                "type": "ROBOT_MSVC_TRANS_HTTPS",
+                                "ipaddrs": [
+                                    {
+                                        "inet_af": 0,
+                                        "inet_addr": nso_ip,
+                                        "mask": "24"
+                                    }
+                                ],
+                                "port": 8888,
+                                "timeout": "30"
+                            }
+                        ],
+                        "supported_models": [
+                            {
+                                "model_prefix": "Cisco-IOS-XR",
+                                "model_version": "7.39"
+                            }
+                        ],
+                        "family": "ROBOT_PROVIDER_NSO",
+                        "properties": {
+                            "ca_device_auth_nso": "ca_device_auth_nso"
+                        }
+                    }
+                ]
+            }
+            try:
+                context = ssl._create_unverified_context()
+                data = json.dumps(data).encode('utf-8')
+                req = urllib.request.Request(prov_url, data, headers=headers)
+                response = urllib.request.urlopen(req, context=context)
+                response_text = response.read().decode('utf-8')
+                print(response_text)
+                return response_text
+            except Exception as e:
+                print(e)
+            
+            
+
+
+
+        def add_devices(jwt_token, device_name, device_ip):
+            dev_url = cw_url + "/crosswork/inventory/v1/nodes"
+            headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + jwt_token
+            }
+            data = {
+              "data": [
+                {
+                  "inv_key_type": "NODE_IP",
+                  "node_ip": {
+                    "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                    "inet_addr": device_ip,
+                    "mask": "24"
+                  },
+                  "host_name": device_name,
+                  "profile": "demo",
+                  "reachability_check": "REACH_CHECK_ENABLE",
+                  "admin_state": "ROBOT_ADMIN_STATE_UP",
+                  "connectivity_info": [
+                    {
+                      "type": "ROBOT_MSVC_TRANS_SSH",
+                      "ipaddrs": [
+                        {
+                          "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                          "inet_addr": device_ip,
+                          "mask": "24"
+                        }
+                      ],
+                      "port": 22,
+                      "reachability_state": "CONN_STATE_UNKNOWN",
+                      "timeout": "30"
+                    },
+                    {
+                      "type": "ROBOT_MSVC_TRANS_SNMP",
+                      "ipaddrs": [
+                        {
+                          "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                          "inet_addr": device_ip,
+                          "mask": "24"
+                        }
+                      ],
+                      "port": 161,
+                      "reachability_state": "CONN_STATE_UNKNOWN",
+                      "timeout": "30"
+                    },
+                    {
+                      "type": "ROBOT_MSVC_TRANS_NETCONF",
+                      "ipaddrs": [
+                        {
+                          "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                          "inet_addr": device_ip,
+                          "mask": "24"
+                        }
+                      ],
+                      "port": 830,
+                      "reachability_state": "CONN_STATE_UNKNOWN",
+                      "timeout": "30"
+                    },
+                    {
+                      "type": "ROBOT_MSVC_TRANS_TELNET",
+                      "ipaddrs": [
+                        {
+                          "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                          "inet_addr": device_ip,
+                          "mask": "24"
+                        }
+                      ],
+                      "port": 23,
+                      "reachability_state": "CONN_STATE_UNKNOWN",
+                      "timeout": "30"
+                    }
+                  ],
+                  "tags": [],
+                  "product_info": {
+                    "software_type": "",
+                    "software_version": "",
+                    "product_type": "",
+                    "product_family": "",
+                    "product_series": "",
+                    "manufacturer": "",
+                    "sys_object_id": "",
+                    "hw_change_timestamp": "",
+                    "config_change_timestamp": "",
+                    "device_type": "NODE_TYPE_ROUTER",
+                    "capability": [
+                      "YANG_MDT",
+                      "SNMP",
+                      "GNMI",
+                      "YANG_CLI"
+                    ],
+                    "syslog_format": "RFC_UNKNOWN"
+                  },
+                  "geo_info": {
+                    "coordinates": {},
+                    "building": "",
+                    "street": "",
+                    "city": "",
+                    "state": "",
+                    "country": "",
+                    "region": "",
+                    "zip": "10001",
+                    "range_incr": {}
+                  },
+                  "routing_info": {
+                    "global_isis_system_id": "",
+                    "global_ospf_router_id": "",
+                    "te_router_id": "",
+                    "telemetry_intf_src_vrf": "",
+                    "telemetry_intf_src_name": ""
+                  },
+                  "contact": "",
+                  "uptime": "",
+                  "last_upd_time": 1612479032,
+                  "providers_family": {
+                    "ROBOT_PROVIDER_NSO": {
+                      "providers": {
+                        "nso201": {
+                          "provider_name": "nso-57cnc"
+                        }
+                      }
+                    }
+                  },
+                  "mapped_dg": ""
+                }
+              ]
+            }
+            try:
+                context = ssl._create_unverified_context()
+                data = json.dumps(data).encode('utf-8')
+                req = urllib.request.Request(dev_url, data, headers=headers)
+                response = urllib.request.urlopen(req, context=context)
+                response_text = response.read().decode('utf-8')
+                print(response_text)
+                return response_text
+            except Exception as e:
+                print(e)
+
+        def add_apps(jwt_token):
+            app_url = cw_url + "/crosswork/platform/v2/capp/repository/packagedata"
+            headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + jwt_token
+                      }
+            data = {
+                "remote_file": "/tmp/king/<3 images>",
+                "ssh_config": {
+                "remote_host": nso_ip,
+                "username": "root",
+                "password": password,
+                "port": 22
+                }
+                }
+            try:
+                context = ssl._create_unverified_context()
+                data = json.dumps(data).encode('utf-8')
+                req = urllib.request.Request(app_url, data, headers=headers)
+                response = urllib.request.urlopen(req, context=context)
+                response_text = response.read().decode('utf-8')
+                print(response_text)
+                return response_text        
+            except Exception as e:
+                print(e)             
+
+
+        def lambda_handler(event, context):
+
+            print("Welcome!! Script will be performing some day0 tasks for user")
+            
+
+            # get new token with new password
+            jwt_token = token(username,password)
+            print("Task: Add Credentials")
+
+            res1 = add_creds(jwt_token)
+            print("Credentials uploaded response: " + str(res1))
+
+            print("Task: Add Provider")
+
+            res3 = add_prov(jwt_token)
+            print("Provider uploaded response: " + str(res3) )
+
+            print("Task: Add Devices")
+
+            res4 = add_devices(jwt_token, device1_name, device1_ip)
+            print("Devices uploaded response: " + str(res4))
+            res4 = add_devices(jwt_token, device2_name, device2_ip)
+            print("Devices uploaded response: " + str(res4))
+            res4 = add_devices(jwt_token, device3_name, device3_ip)
+            print("Devices uploaded response: " + str(res4))    
+            res5 = add_apps(jwt_token)
+            print("Devices uploaded response: " + str(res5)) 
+
+      Policies:
+      - AdministratorAccess
+
+
+
+  ChangePasswordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.lambda_ha
+      ndler    
+      Runtime: python3.9
+      Timeout: 30
+      VpcConfig:
+        SecurityGroupIds: 
+          - !Ref SecGroup
+        SubnetIds:
+          - !Ref CwMgmtSubnetId
+      Environment:
+        Variables:
+          cw_ip: !Ref CNCControllerIP
+          username: admin
+          pass_to_reset: admin
+          password: !Ref CwSSHPassword                   
+      InlineCode: |
+        '''
+        Update Default Password of the CNC
+        '''
+        import os
+        import sys
+        import time
+        import json
+        from collections import OrderedDict
+        import urllib.request, urllib.parse
+        import ssl
+
+
+
+
+        # CNC IP
+        cw_ip = os.environ['cw_ip']
+        username = os.environ['username']
+        pass_to_reset = os.environ['pass_to_reset']
+        password = os.environ['password']
+
+
+
+
+
+        ACCEPTED_CODES = [200, 201, 204]
+        cw_url = "https://" + cw_ip + ":30603"
+
+
+
+
+        def token(username, password):
+            '''
+            Follow Crosswork API 2 step process to generate JWT via TGT
+            :param username: Crosswork Username
+            :param password: Password
+            :param cw_url: Base URL for Crosswork API requests
+            :return: JWT token for Crosswork API requests
+            '''
+            token_headers = {'Content-type': 'application/x-www-form-urlencoded', 'Accept': 'text/plain'}
+            token_uri = "/crosswork/sso/v1/tickets"
+
+            tgt_url = f"{cw_url}{token_uri}?username={username}&password={password}"
+            print(f"tgt_url={tgt_url}")
+            try:
+
+                context = ssl._create_unverified_context()
+                tgt_request = urllib.request.Request(tgt_url, headers=token_headers, method='POST')
+                print(tgt_request.method) 
+                tgt_response = urllib.request.urlopen(tgt_request, context=context)
+                tgt_content = tgt_response.read().decode()
+                print(f"TGT response = {tgt_content}")
+                
+                jwt_url = f"{cw_url}{token_uri}/{tgt_content}"
+                jwt_payload = f"service={cw_url}/app-dashboard"
+                jwt_data = jwt_payload.encode('utf-8')
+                jwt_request = urllib.request.Request(jwt_url, data=jwt_data, headers=token_headers)
+                jwt_response = urllib.request.urlopen(jwt_request, context=context)
+            except Exception as e:
+                print(e)
+            return jwt_response.read().decode()
+
+        def update_default_password(jwt_token, user, defpass, newpass, expected_code=ACCEPTED_CODES):
+            print("Update Default Password")
+            try:
+                context = ssl._create_unverified_context()
+                # jwt_token = token(user, defpass)
+                url = cw_url + '/crosswork/password/v1'
+                print(f"url to update default password: {url}")
+                header = {'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json',
+                          'Authorization': 'Bearer ' + jwt_token}
+                payload = {
+                    "OldPassword": defpass,
+                    "NewPassword": newpass
+                }
+                data = json.dumps(payload).encode('utf-8')
+                request = urllib.request.Request(url, data=data, headers=header, method='PUT')
+                response = urllib.request.urlopen(request, context=context)
+                response_code = response.status
+                if response_code in expected_code:
+                    print("Default Password reset successfully")
+                    return "SUCCESS"
+            except Exception as e:
+                print(e)
+                return "ERROR"
+
+
+        def lambda_handler(event, context):
+
+            print("Welcome!! Script will be changing the default password of CNC")
+            
+            
+            jwt_token = token(username,pass_to_reset)   #get temporary token with initial default password
+            print(f"jwt_token= {jwt_token}")
+            print("Task1: Update Default Password")
+            status = update_default_password(jwt_token, username, pass_to_reset, password)
+            return status
+
+      Policies:
+      - AdministratorAccess
+
+
+
+
+  CrossworksEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub ${CrossworkEventBusName}-${AWS::StackName}
+
+
+
+
+#State Machine will run after all servers are deployed... wait 1 hour, then run the APIs
+  APIStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        Comment: Run the APIs necessary for CW completion
+        StartAt: Wait time for CW server bringup
+        States:                
+          Wait time for CW server bringup:
+            Type: Wait
+            Seconds: 3600
+            Next: Change Default Password
+          Change Default Password:
+            Type: Task
+            Resource: !GetAtt ChangePasswordFunction.Arn
+            ResultPath: $.PasswordStatus
+            Next: Password Changed?
+          Password Changed?:
+            Type: Choice
+            Choices:
+            - Variable: "$.PasswordStatus"
+              StringEquals: SUCCESS
+              Next: Run APIs
+            Default: Wait 10 more minutes
+          Wait 10 more minutes:
+            Type: Wait
+            Seconds: 600
+            Next: Change Default Password
+          Run APIs:
+            Type: Task
+            Resource: !GetAtt RunAPIsFunction.Arn
+            Next: SuccessState       
+          SuccessState: 
+            Type: Succeed
+      Policies:
+      - LambdaInvokePolicy:
+          FunctionName: !Ref RunAPIsFunction
+      - LambdaInvokePolicy:
+          FunctionName: !Ref ChangePasswordFunction          
+      Events:
+        CrossworksRule:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !Ref CrossworksEventBus
+            InputPath: $.detail
+            Pattern:
+              source:
+                - com.aws.crossworks
+              detail-type:
+                - run state machine
+
+
+
+
+##
+## Custom Resource for Events
+  APICustomResource:
+    Type: Custom::APILambda
+    Properties:
+      ServiceToken: !GetAtt APICustomResourceLambda.Arn
+      StateFunctionARN: !Ref APIStateMachine
+      EventBusName: !Ref CrossworksEventBus
+
+
+  APICustomResourceLambda:
+    Type: AWS::Lambda::Function
+    DependsOn: 
+    - APIStateMachine
+    Properties:
+      Description: Lambda for APICustomResource
+      Handler: index.handler
+      Runtime: python3.9
+      Role: !GetAtt APICustomResourceLambdaRole.Arn
+      Timeout: 300
+      Code:
+        ZipFile: !Sub | 
+          import boto3
+          import json
+          import cfnresponse
+          import os
+          import time
+
+          region = os.environ['AWS_REGION']
+
+
+          def handler(event, context):
+            print('Received event: %s' % json.dumps(event))
+            status = cfnresponse.SUCCESS
+            responseData = {}
+
+            
+            event_bus_name = event['ResourceProperties']['EventBusName']
+            print(event_bus_name)
+            
+            
+
+            try:
+              if event['RequestType'] == 'Create':
+                print('sleeping while eventbridge rule is created')
+                time.sleep(120)
+                aws_events_client = boto3.client('events', region_name=region)
+                response = aws_events_client.put_events(
+                    Entries=[
+                    {
+                        'Source': 'com.aws.crossworks',
+                        'DetailType': 'run state machine',
+                        'Detail': json.dumps({}),
+                        'EventBusName': event_bus_name
+                    }
+                    ]
+                )
+                print(response)
+                 
+              elif event['RequestType'] == 'Delete':
+                print('Deleting.  Nothing to do.')                    
+              else:
+                print('Nothing to do')                  
+            except Exception as e:
+              print(e)
+              status = cfnresponse.FAILED
+            finally:
+              cfnresponse.send(event, context, status, responseData)
+  
+  APICustomResourceLambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action:
+            - sts:AssumeRole
+        ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        Path: "/"
+        Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: "*"
+              Resource: "*"
